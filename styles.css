@@ -1,6 +1,7 @@
 * { box-sizing: border-box; }
 :root {
   color-scheme: light;
+  scroll-padding-block-start: 5rem;
   font-family: "Inter", "Segoe UI", sans-serif;
   color: var(--ink);
   background-color: var(--metal-base);
@@ -65,8 +66,11 @@ button, .button { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
 .shell { width: min(1180px, calc(100% - 64px)); margin-inline: auto; }
 .skip { position: absolute; top: -5rem; left: 1rem; }
-.skip:focus { top: 1rem; z-index: 2; background: var(--surface); padding: .6rem; }
+.skip:focus { top: 1rem; z-index: 6; background: var(--surface); padding: .6rem; }
 .top {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 5;
   background: linear-gradient(180deg, var(--surface), var(--inset));
   border-bottom: 1px solid var(--line);
   box-shadow: 0 4px 16px var(--shadow);
@@ -276,6 +280,7 @@ legend { font-weight: 750; }
   .hero { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
 }
 @media (max-width: 620px) {
+  :root { scroll-padding-block-start: 7.5rem; }
   .shell { width: calc(100% - 28px); }
   .bar { flex-wrap: wrap; padding: 8px 0 12px; gap: 8px; }
   nav { order: 3; width: 100%; justify-content: space-between; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 10px; }
