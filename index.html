@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interaktive Übungen und Unterrichtsmaterial für Industriekaufleute im zweiten Ausbildungsjahr.">
+  <title>IndustryLab – Lernwerkstatt für Industriekaufleute</title>
+  <script src="./theme.js"></script>
+  <link rel="icon" type="image/png" href="./industrylab-logo.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt</a>
+  <header class="top"><div class="shell bar">
+    <a class="brand" href="#start"><img class="brand-mark" src="./industrylab-logo.png" width="52" height="52" alt=""> <span>Industry<span class="brand-accent">Lab</span></span></a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#lernfelder">Lernpfad</a><a href="#material">Downloads</a><a href="#fortschritt">Mein Lernstand</a>
+    </nav>
+    <div class="header-tools">
+      <a href="#fortschritt" class="points" id="top-points">0 EP</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dunkelmodus" aria-pressed="false" title="Hellen oder dunklen Modus wählen" hidden>
+        <span class="theme-sun" aria-hidden="true">☼</span><span class="theme-moon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div></header>
+  <main id="main" class="shell">
+    <section class="hero" id="start">
+      <div class="hero-copy">
+        <p class="eyebrow">Industriekaufleute · 2. Ausbildungsjahr</p>
+        <h1>Industry<span>Lab</span></h1>
+        <p class="intro">Arbeite mit Produktions-, Lager-, Kosten- und Marketingdaten der fiktiven Nagold Components GmbH. Löse Praxisaufgaben und prüfe dein Wissen.</p>
+        <a class="button" id="continue" href="#lernfelder">Lernpfad starten <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-progress">
+        <p class="eyebrow">Dein Lernstand</p>
+        <p class="progress-count"><strong id="done">0</strong><span id="count"> / 17</span></p>
+        <p>Aufgabenchecks bestanden</p>
+        <progress id="progress" max="17" value="0" aria-label="Bestandene Aufgabenchecks"></progress>
+        <p class="hero-note">5 Erfahrungspunkte (EP) je bestandenem Aufgabencheck.</p>
+      </div>
+    </section>
+
+    <section class="section" id="lernfelder">
+      <div class="section-head"><div><h2>Lernpfad</h2><p>Wähle ein Thema aus den Lernfeldern 6 bis 9.</p></div>
+      <label class="search">Thema suchen<input id="search" type="search" placeholder="z. B. Pivot oder Lager"></label></div>
+      <div id="filters" class="filters" role="group" aria-label="Nach Lernfeld filtern"></div>
+      <p id="results" class="sr-only" role="status"></p>
+      <div id="cards" class="cards"></div>
+      <noscript>Aktiviere JavaScript für Übungen, Downloads und Lernstand.</noscript>
+    </section>
+
+    <section class="section panel" id="material">
+      <h2>Unterrichtsmaterial</h2><p>Word-Aufgaben und Excel-Ausgangsdaten für die Arbeit im Unterricht.</p>
+      <ul class="material-list" id="downloads"></ul>
+    </section>
+
+    <section class="section panel" id="fortschritt">
+      <h2>Mein Lernstand</h2>
+      <p id="balance"></p>
+      <p>Dein Lernstand wird in diesem Browser gespeichert. Mit einer Sicherung kannst du ihn auf einen anderen Rechner mitnehmen.</p>
+      <ul class="ledger" id="ledger"></ul>
+      <div class="actions">
+        <button id="export" type="button">Sicherung speichern</button>
+        <button id="import" class="secondary" type="button">Sicherung laden</button>
+        <input type="file" id="backup-file" accept=".json,application/json" hidden>
+      </div>
+      <p id="backup-status" role="status"></p>
+    </section>
+  </main>
+  <footer class="shell footer">IndustryLab · Informatik für Industriekaufleute</footer>
+
+  <dialog id="lesson" aria-labelledby="lesson-title">
+    <div class="dialog-top"><span id="lesson-label" class="eyebrow"></span><button id="close" class="secondary" type="button">Schließen</button></div>
+    <h2 id="lesson-title" tabindex="-1"></h2>
+    <p id="lesson-brief"></p>
+    <div id="lesson-files"></div>
+    <div id="scenario"></div>
+    <form id="quiz"></form>
+  </dialog>
+</body>
+</html>
