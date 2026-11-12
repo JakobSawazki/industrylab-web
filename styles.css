@@ -110,22 +110,38 @@ nav a:hover, .download:hover { text-decoration: underline; }
   white-space: nowrap;
 }
 .theme-toggle {
-  position: relative;
-  width: 43px;
-  height: 43px;
+  width: 44px;
+  height: 44px;
   padding: 0;
+  flex: none;
+  border-width: 3px;
   border-radius: 50%;
-  --control-ink: var(--accent);
+  --control-face: radial-gradient(circle at 32% 22%, #375a77, #132c43 65%, #0a1c2d);
+  --icon-steel: linear-gradient(145deg, #fff, #bdcdda 46%, #7e98af 51%, #e5eef5);
 }
 .theme-toggle[hidden] { display: none; }
-.theme-sun { font: 1.75rem/1 "Segoe UI Symbol", sans-serif; }
+.theme-sun, .theme-moon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+.theme-sun {
+  background: repeating-conic-gradient(from -7deg, #dce8f2 0deg 14deg, transparent 14deg 45deg);
+}
+.theme-sun::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--icon-steel);
+  box-shadow: 0 0 0 2px #17334a;
+}
 .theme-moon {
   display: none;
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  box-shadow: -5px 4px 0 currentColor;
-  transform: translate(2px, -2px);
+  background: var(--icon-steel);
+  mask-image: radial-gradient(circle at 74% 25%, transparent 0 43%, #000 47%);
+  transform: rotate(-12deg);
 }
 [data-theme="dark"] .theme-moon { display: block; }
 [data-theme="dark"] .theme-sun { display: none; }
@@ -301,5 +317,13 @@ legend { font-weight: 750; }
 @media (forced-colors: active) {
   .button, button, .points { border-color: ButtonText; }
   .filters button[aria-pressed="true"] { border-color: Highlight; }
-  .theme-moon { box-shadow: none; border: 2px solid ButtonText; border-right-color: transparent; }
+  .theme-sun, .theme-moon {
+    background: none;
+    mask-image: none;
+    transform: none;
+    font: 22px/1 "Segoe UI Symbol", sans-serif;
+  }
+  .theme-sun::before, .theme-moon::before { position: static; background: none; box-shadow: none; }
+  .theme-sun::before { content: "☼"; }
+  .theme-moon::before { content: "☾"; }
 }
