@@ -229,7 +229,23 @@ h2 { font-size: clamp(1.55rem, 4vw, 2.15rem); letter-spacing: -.045em; margin: 0
 .material-list li, .ledger li { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; border-top: 1px solid var(--line); padding: .72rem 0; }
 .downloads, .actions { display: flex; flex-wrap: wrap; gap: .55rem 1rem; }
 .download { color: var(--link); font-weight: 750; text-underline-offset: .2em; }
-.footer { padding-block: 30px; color: var(--muted); font-size: .85rem; }
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .75rem 1.5rem;
+  padding-block: 30px;
+  color: var(--muted);
+  font-size: .85rem;
+}
+.footer-credit {
+  margin-inline-start: auto;
+  color: var(--link);
+  font-weight: 700;
+  text-align: end;
+  text-underline-offset: .2em;
+}
 dialog {
   background: var(--surface);
   color: var(--ink);
