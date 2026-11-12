@@ -290,7 +290,7 @@ legend { font-weight: 750; }
 @media (max-width: 620px) {
   :root { scroll-padding-block-start: 7.5rem; }
   .shell { width: calc(100% - 28px); }
-  .bar { flex-wrap: wrap; padding: 8px 14px 12px; gap: 8px; }
+  .bar { width: 100%; flex-wrap: wrap; padding: 8px 12px 12px; gap: 8px; }
   nav { order: 3; width: 100%; justify-content: space-between; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 10px; }
   .brand-mark { width: 44px; height: 44px; }
   .hero { grid-template-columns: minmax(0, 1fr); margin-top: 16px; }
