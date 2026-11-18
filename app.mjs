@@ -470,12 +470,8 @@ function exportBackup() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-for (const id of ["export", "quick-export"]) {
-  find(id).addEventListener("click", exportBackup);
-}
-for (const id of ["import", "quick-import"]) {
-  find(id).addEventListener("click", () => find("backup-file").click());
-}
+find("quick-export").addEventListener("click", exportBackup);
+find("quick-import").addEventListener("click", () => find("backup-file").click());
 find("backup-file").addEventListener("change", async event => {
   const file = event.target.files[0];
   if (!file) return;
