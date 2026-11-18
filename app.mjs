@@ -25,6 +25,36 @@ function element(tag, content, className) {
   return node;
 }
 
+const learningNav = find("learning-nav");
+if (learningNav) {
+  const summary = learningNav.querySelector("summary");
+  const currentLesson = lessonPage ? Number(route.get("nr")) : null;
+  const items = lessons.map(lesson => {
+    const item = element("li");
+    const number = String(lesson.id).padStart(2, "0");
+    const link = element("a");
+    link.href = lessonHref(lesson.id);
+    link.append(element("span", number, "learning-nav-number"), element("span", lesson.title));
+    if (lesson.id === currentLesson) link.setAttribute("aria-current", "page");
+    item.append(link);
+    return item;
+  });
+  find("learning-nav-units").append(...items);
+
+  document.addEventListener("pointerdown", event => {
+    if (learningNav.open && !learningNav.contains(event.target)) learningNav.open = false;
+  });
+  learningNav.addEventListener("focusout", event => {
+    if (event.relatedTarget && !learningNav.contains(event.relatedTarget)) learningNav.open = false;
+  });
+  learningNav.addEventListener("keydown", event => {
+    if (!learningNav.open || event.key !== "Escape") return;
+    event.preventDefault();
+    learningNav.open = false;
+    summary.focus();
+  });
+}
+
 function savedProgress() {
   const raw = localStorage.getItem(storageKey);
   return raw ? readBackup(JSON.parse(raw)) : [];

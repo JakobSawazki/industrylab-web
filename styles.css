@@ -103,6 +103,49 @@ button, .button { cursor: pointer; }
 .top nav a, .top nav .nav-action { font-size: .9rem; font-weight: 650; text-decoration: none; color: var(--muted); }
 .top nav a:hover, .top nav .nav-action:hover, .download:hover { text-decoration: underline; }
 .top nav a[aria-current="page"] { color: var(--link); }
+.learning-nav { position: relative; }
+.learning-nav summary {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 650;
+  cursor: pointer;
+  list-style: none;
+}
+.learning-nav summary::-webkit-details-marker { display: none; }
+.learning-nav summary::after {
+  content: "";
+  width: .42em;
+  height: .42em;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: translateY(-.12em) rotate(45deg);
+}
+.learning-nav[open] summary::after { transform: translateY(.12em) rotate(225deg); }
+.learning-nav[open] summary, .learning-nav summary:hover { color: var(--link); }
+.learning-nav-panel {
+  position: absolute;
+  inset-block-start: calc(100% + .7rem);
+  inset-inline-start: 0;
+  z-index: 1;
+  width: min(22rem, calc(100vw - 24px));
+  max-height: min(25rem, 60vh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: .45rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 12px 24px var(--shadow);
+}
+.learning-nav-panel ol { list-style: none; padding: 0; margin: .25rem 0 0; }
+.top nav .learning-nav-panel a { display: flex; gap: .65rem; align-items: baseline; padding: .62rem .65rem; border-radius: 5px; color: var(--ink); }
+.top nav .learning-nav-panel a:hover, .top nav .learning-nav-panel a[aria-current="page"] { background: var(--selected); color: var(--link); }
+.learning-nav-panel a:focus-visible { outline-offset: -2px; }
+.top nav .learning-nav-overview { border-bottom: 1px solid var(--line); color: var(--link); }
+.learning-nav-number { flex: none; color: var(--link); font-variant-numeric: tabular-nums; }
 .header-tools { display: flex; align-items: center; gap: .55rem; }
 .points {
   --control-face: var(--quiet-face);

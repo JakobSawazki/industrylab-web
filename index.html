@@ -15,7 +15,14 @@
   <header class="top"><div class="shell bar">
     <a class="brand" href="./#top" aria-label="IndustryLab – Startseite"><img class="brand-mark" src="./industrylab-logo.png" width="72" height="72" alt=""> <span>Industry<span class="brand-accent">Lab</span></span></a>
     <nav aria-label="Hauptnavigation">
-      <a href="./lernpfad.html">Lernpfad</a><a href="#material">Downloads</a><button id="open-progress" class="nav-action" type="button" aria-haspopup="dialog" aria-controls="profile">Mein Lernstand</button>
+      <details class="learning-nav" id="learning-nav">
+        <summary>Lernpfad</summary>
+        <div class="learning-nav-panel">
+          <a class="learning-nav-overview" href="./lernpfad.html">Alle Einheiten im Überblick</a>
+          <ol id="learning-nav-units"></ol>
+        </div>
+      </details>
+      <a href="#material">Downloads</a><button id="open-progress" class="nav-action" type="button" aria-haspopup="dialog" aria-controls="profile">Mein Lernstand</button>
     </nav>
     <div class="header-tools">
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dunkelmodus" aria-pressed="false" title="Hellen oder dunklen Modus wählen" hidden>
