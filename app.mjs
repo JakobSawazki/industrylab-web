@@ -221,6 +221,15 @@ function drawLessonPlan(unit, extras) {
     dossier.append(element("h3", title), list, incident);
     sourceData.after(dossier);
   }
+  if (unit.criteria) {
+    const checklist = element("ul", "", "lesson-steps");
+    for (const [label, description] of unit.criteria) {
+      const item = element("li");
+      item.append(element("strong", label + ". "), description);
+      checklist.append(item);
+    }
+    hint.before(element("h3", "Prüfe dein Ergebnis"), checklist);
+  }
   for (const { minutes, title, data, steps, result } of extras) {
     const exercise = element("details", "", "lesson-hint");
     const instructions = element("ol", "", "lesson-steps");

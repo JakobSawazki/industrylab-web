@@ -120,7 +120,7 @@ const plans = [
       "Öffne die Störungsmeldung. Erkläre, wer informiert werden muss und was im ERP zum Lieferplan steht."],
     "Prozessskizze und begründeter Vorschlag für den Umgang mit der Verzögerung.",
     "Trenne die geplante Fertigstellung, den Versand und die Ankunft beim Kunden. Für jede Station kann im ERP ein eigener Termin stehen.",
-    {
+    { caseFile: {
       title: "Fallakte O201",
       handoffs: [
         ["Vertrieb → Planung", "Der Vertrieb gibt den Kundenwunsch weiter. Auftrag O201 umfasst 40 Baugruppen BG-40 mit gewünschter Ankunft am Freitag."],
@@ -130,7 +130,7 @@ const plans = [
         ["Versand → Buchhaltung", "Der Versand meldet nach der Übergabe an den Transportdienst, wie viele Stück wann den Betrieb verlassen haben. Die Buchhaltung erhält diese Daten für die Rechnung."]
       ],
       delay: "Die Fertigung meldet, dass die fehlenden 10 Baugruppen voraussichtlich erst am Montag fertig sind. Der Kunde bestätigt die Teilmenge von 30 Stück zur Lieferung am Freitag. Den Liefertermin der restlichen 10 Stück hat der Vertrieb noch nicht bestätigt."
-    }
+    } }
   ],
   [14,
     "Dubletten und fehlende Werte bei einem CSV-Import behandeln.",
@@ -160,18 +160,24 @@ const plans = [
     "Verwende einen bekannten Kontaktweg. Region und Versandmenge reichen für die Auswertung."
   ],
   [17,
-    "Aus Verkaufszahlen eine Empfehlung für die Geschäftsleitung ableiten.",
+    "Die Geschäftsleitung der Nagold Components GmbH hat Zeit für eine vertiefte Analyse. Empfiehl, welche Region sie zuerst untersuchen sollte und zu welcher Frage.",
     "Monat | Nord € | Süd €\nApril | 12.000 | 9.000\nMai | 13.000 | 11.000\nJuni | 11.000 | 14.000",
-    ["Berechne in der Excel-Ausgangsdatei je Region die Quartalssumme und die Veränderung von April bis Juni.",
-      "Zeichne ein Liniendiagramm mit beiden Regionen und vergleiche es mit der Tabelle.",
-      "Empfiehl eine Region zur vertieften Analyse. Nenne zwei Zahlen und eine offene Datenfrage."],
-    "Tabelle, Diagramm und begründete Empfehlung in zwei bis drei Sätzen.",
-    "Quartalssumme und Entwicklung können für verschiedene Regionen sprechen. Umsatz allein sagt nichts über den Gewinn."
+    ["Berechne in Excel mit Formeln für beide Regionen den Quartalsumsatz und die Veränderung in Euro von April bis Juni.",
+      "Erstelle aus den Monatswerten ein Liniendiagramm mit beiden Regionen. Gleiche die April- und Juniwerte im Diagramm mit der Tabelle ab.",
+      "Wähle einen Schwerpunkt für die Analyse. Soll sie das größere Umsatzvolumen oder die stärkere Entwicklung untersuchen? Empfiehl eine Region mit zwei vergleichbaren Zahlen und nenne eine konkrete Frage für die weitere Analyse."],
+    "Excel-Arbeitsmappe mit Kennzahlen und Diagramm. Empfehlung an die Geschäftsleitung in zwei bis drei Sätzen.",
+    "Quartalsumsatz und Entwicklung beantworten unterschiedliche Fragen. Prüfe, welche Kennzahl zu deiner Empfehlung passt und welche Daten die Geschäftsleitung als Nächstes bräuchte.",
+    { criteria: [
+      ["Kennzahlen", "Für Nord und Süd stehen Quartalsumsatz und Veränderung in Euro in der Tabelle. Die Veränderung rechnest du als Juni minus April."],
+      ["Diagramm", "April, Mai und Juni stehen in dieser Reihenfolge auf der Zeitachse. Beide Regionen sind erkennbar, die Wertachse ist in Euro beschriftet und die April- und Juniwerte stimmen mit der Tabelle überein."],
+      ["Empfehlung", "Du nennst den Schwerpunkt und vergleichst die passende Kennzahl für beide Regionen, bevor du eine Region empfiehlst."],
+      ["Offene Frage", "Deine Frage macht klar, welche zusätzliche Information du brauchst und was du damit klären willst."]
+    ] }
   ]
 ];
 
-export const units = Object.fromEntries(plans.map(([id, goal, data, steps, result, hint, caseFile]) => [
-  id, { goal, data, steps, result, hint, caseFile }
+export const units = Object.fromEntries(plans.map(([id, goal, data, steps, result, hint, options]) => [
+  id, { goal, data, steps, result, hint, ...options }
 ]));
 
 export const extensions = {
@@ -229,5 +235,5 @@ export const responseFields = {
   14: [["protokoll","Änderungsprotokoll","Welche Zeile hast du entfernt? Welcher Wert fehlt und wie behandelst du ihn? Erkläre auch, wie die führenden Nullen erhalten bleiben."]],
   15: [["test","Formeltest dokumentieren","Notiere für 17, 20 und 23 Stück jeweils das erwartete Ergebnis und das Ergebnis des KI-Vorschlags."], ["korrektur","Korrektur erklären","Schreibe deine korrigierte Formel auf und begründe, welche Änderung den Fehler behebt."]],
   16: [["massnahmen","Nachricht und Datenauswertung prüfen","Nenne zwei Warnsignale und einen unabhängigen Prüfweg. Welche Spalten brauchst du für die Auswertung?"], ["meldung","Internen Meldehinweis formulieren","Schreibe eine kurze fiktive Meldung mit dem Anlass und deinem bisherigen Umgang mit der Nachricht."]],
-  17: [["kennzahlen","Kennzahlen festhalten","Notiere Quartalssumme und Veränderung von April bis Juni für beide Regionen."], ["empfehlung","Empfehlung begründen","Empfiehl eine Region für die vertiefte Analyse. Nenne zwei Zahlen und eine offene Datenfrage."]],
+  17: [["kennzahlen","Kennzahlen festhalten","Notiere Quartalssumme und Veränderung von April bis Juni für beide Regionen."], ["empfehlung","Empfehlung begründen","Nenne deinen Schwerpunkt und die empfohlene Region. Vergleiche die passende Kennzahl für Nord und Süd und formuliere eine konkrete offene Datenfrage."]],
 };
