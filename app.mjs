@@ -194,18 +194,33 @@ function drawLessonPlan(unit, extras) {
 
   const hint = element("details", "", "lesson-hint");
   hint.append(element("summary", "Tipp anzeigen"), element("p", unit.hint));
+  const sourceData = element("p", unit.data, "lesson-data");
   plan.replaceChildren(
     element("h2", "Arbeitsauftrag"),
     element("p", unit.goal),
     element("h3", "Ablauf · 45 Minuten"),
     schedule,
     element("h3", "Ausgangsdaten"),
-    element("p", unit.data, "lesson-data"),
+    sourceData,
     element("h3", "Arbeitsschritte"),
     steps,
     element("p", "Ergebnis: " + unit.result),
     hint
   );
+  if (unit.caseFile) {
+    const { title, handoffs, delay } = unit.caseFile;
+    const list = element("ol", "", "case-handoffs");
+    for (const [handoff, note] of handoffs) {
+      const row = element("li");
+      row.append(element("strong", handoff), element("p", note));
+      list.append(row);
+    }
+    const incident = element("details", "", "lesson-hint");
+    incident.append(element("summary", "Störungsmeldung öffnen"), element("p", delay));
+    const dossier = element("section", "", "erp-case");
+    dossier.append(element("h3", title), list, incident);
+    sourceData.after(dossier);
+  }
   for (const { minutes, title, data, steps, result } of extras) {
     const exercise = element("details", "", "lesson-hint");
     const instructions = element("ol", "", "lesson-steps");

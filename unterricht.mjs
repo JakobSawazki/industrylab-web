@@ -114,12 +114,23 @@ const plans = [
   ],
   [13,
     "Materialfluss und Informationsfluss in einem Auftrag unterscheiden.",
-    "O201: 40 Baugruppen, 30 verfügbar, 10 zu fertigen. Lieferung am Freitag.",
-    ["Skizziere den Weg von Vertrieb über Produktion und Lager bis zur Buchhaltung.",
-      "Notiere pro Übergabe einen Beleg oder Datensatz und zwei benötigte Felder. Markiere tatsächliche Warenbewegungen.",
-      "Erkläre, wer bei einer Verzögerung der Fertigung informiert werden muss und welche Daten sich ändern."],
+    "Der Kunde möchte 40 Baugruppen am Freitag erhalten. Für Auftrag O201 liegen 30 Stück im Lager. Die restlichen 10 sollen gefertigt werden.",
+    ["Lies die Fallakte. Skizziere die fünf Übergaben vom Vertrieb bis zur Buchhaltung.",
+      "Notiere je Übergabe einen Beleg oder Datensatz und zwei benötigte Felder. Markiere, wo Ware bewegt wird.",
+      "Öffne die Störungsmeldung. Erkläre, wer informiert werden muss und was im ERP zum Lieferplan steht."],
     "Prozessskizze und begründeter Vorschlag für den Umgang mit der Verzögerung.",
-    "Ein Auftrag transportiert Informationen. Versand und Lagerbewegung betreffen die Ware."
+    "Trenne die geplante Fertigstellung, den Versand und die Ankunft beim Kunden. Für jede Station kann im ERP ein eigener Termin stehen.",
+    {
+      title: "Fallakte O201",
+      handoffs: [
+        ["Vertrieb → Planung", "Der Vertrieb gibt den Kundenwunsch weiter. Auftrag O201 umfasst 40 Baugruppen BG-40 mit gewünschter Ankunft am Freitag."],
+        ["Planung → Fertigung", "Die Planung prüft den Bestand und beauftragt die Fertigung mit den fehlenden 10 Stück. Geplant ist die Fertigstellung am Donnerstag."],
+        ["Fertigung → Lager", "Sobald die geprüften Baugruppen fertig sind, übergibt die Fertigung sie an das Lager. Das Lager erfasst die tatsächlich eingegangene Menge für Fach B-04."],
+        ["Lager → Versand", "Das Lager stellt die freigegebenen Baugruppen aus Fach B-04 am Packplatz bereit. Der Versand erhält die Auftragsnummer und die Menge zur Zuordnung."],
+        ["Versand → Buchhaltung", "Der Versand meldet nach der Übergabe an den Transportdienst, wie viele Stück wann den Betrieb verlassen haben. Die Buchhaltung erhält diese Daten für die Rechnung."]
+      ],
+      delay: "Die Fertigung meldet, dass die fehlenden 10 Baugruppen voraussichtlich erst am Montag fertig sind. Der Kunde bestätigt die Teilmenge von 30 Stück zur Lieferung am Freitag. Den Liefertermin der restlichen 10 Stück hat der Vertrieb noch nicht bestätigt."
+    }
   ],
   [14,
     "Dubletten und fehlende Werte bei einem CSV-Import behandeln.",
@@ -159,8 +170,8 @@ const plans = [
   ]
 ];
 
-export const units = Object.fromEntries(plans.map(([id, goal, data, steps, result, hint]) => [
-  id, { goal, data, steps, result, hint }
+export const units = Object.fromEntries(plans.map(([id, goal, data, steps, result, hint, caseFile]) => [
+  id, { goal, data, steps, result, hint, caseFile }
 ]));
 
 export const extensions = {
@@ -214,7 +225,7 @@ export const responseFields = {
   10: [["trend","Dashboard erklären","Nenne Gesamtumsatz, stärksten Monat und die stärksten Rückgänge."], ["frage","Ursache untersuchen","Welche Frage würdest du stellen, um einen Rückgang zu erklären?"]],
   11: [["modell","Tabellen und Schlüssel","Notiere für Kunden, Aufträge, Artikel und Auftragspositionen den Primärschlüssel und die benötigten Fremdschlüssel."], ["position","Auftragspositionen","Erfasse die drei Positionen. Begründe, warum die Artikelnummer allein keine Position eindeutig kennzeichnet."]],
   12: [["sql","SQL-Abfragen","Schreibe zuerst die Abfrage für offene Auftragsnummern und danach die Variante mit JOIN und Kundennamen."], ["treffer","Erwartete Treffer","Notiere vor der Kontrolle im Labor die erwarteten Zeilen."]],
-  13: [["belege","Übergaben im ERP","Nenne je Übergabe einen Beleg oder Datensatz und zwei Datenfelder. Kennzeichne die Warenbewegungen."], ["verzug","Verzögerung bearbeiten","Wer muss informiert werden? Welche Mengen und Termine müssen nach der Abstimmung im ERP stehen?"]],
+  13: [["belege","Übergaben im ERP","Nenne je Übergabe einen Beleg oder Datensatz und zwei Datenfelder. Kennzeichne die Warenbewegungen."], ["verzug","Verzögerung bearbeiten","Wer muss informiert werden? Was steht zu den bestätigten 30 Stück und zu den restlichen 10 Stück im ERP?"]],
   14: [["protokoll","Änderungsprotokoll","Welche Zeile hast du entfernt? Welcher Wert fehlt und wie behandelst du ihn? Erkläre auch, wie die führenden Nullen erhalten bleiben."]],
   15: [["test","Formeltest dokumentieren","Notiere für 17, 20 und 23 Stück jeweils das erwartete Ergebnis und das Ergebnis des KI-Vorschlags."], ["korrektur","Korrektur erklären","Schreibe deine korrigierte Formel auf und begründe, welche Änderung den Fehler behebt."]],
   16: [["massnahmen","Nachricht und Datenauswertung prüfen","Nenne zwei Warnsignale und einen unabhängigen Prüfweg. Welche Spalten brauchst du für die Auswertung?"], ["meldung","Internen Meldehinweis formulieren","Schreibe eine kurze fiktive Meldung mit dem Anlass und deinem bisherigen Umgang mit der Nachricht."]],

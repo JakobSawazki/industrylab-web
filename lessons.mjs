@@ -126,7 +126,7 @@ export const lessons = [
     title: "ERP und Informationsfluss",
     brief: "Verfolge einen Kundenauftrag vom Vertrieb über Produktion und Lager bis zur Rechnung. Beschreibe die benötigten Daten an jeder Übergabe.",
     check: {"prompt":"Welche Daten benötigt das Lager für einen Kommissionierauftrag unmittelbar?","choices":["Nur die Rechnungsnummer","Nur den Namen des Vertriebsmitarbeiters","Artikelnummer, Menge und Lagerplatz"],"correct":2,"feedback":"Das Lager muss wissen, welcher Artikel in welcher Menge an welchem Ort bereitliegt."},
-    transfer: {"prompt":"30 von 40 Stück sind verfügbar. Die restlichen 10 werden erst am Montag fertig. Was sollte nach Abstimmung mit dem Kunden im ERP stehen?","choices":["Der ursprüngliche Freitagstermin für alle 40 Stück","Nur eine Notiz ohne Mengen oder Liefertermine","Die bestätigten Mengen und Termine für Teil- und Restlieferung"],"correct":2,"feedback":"Die getrennten Mengen und Termine geben Lager, Versand und Vertrieb denselben Plan."},
+    transfer: {"prompt":"30 von 40 Stück kommen am Freitag an. Der Liefertermin für die restlichen 10 Stück steht jetzt ebenfalls fest. Welche Angaben braucht der Lieferplan im ERP?","choices":["Den ursprünglichen Freitagstermin für alle 40 Stück","Nur eine Notiz ohne Mengen oder Liefertermine","Die bestätigten Mengen und Termine für Teil- und Restlieferung"],"correct":2,"feedback":"Für jede Lieferung stehen die vereinbarte Menge und der bestätigte Liefertermin im ERP."},
     files: [],
   },
   {

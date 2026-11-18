@@ -584,6 +584,11 @@ legend { font-weight: 750; }
 .lesson-steps li + li { margin-top: .5rem; }
 .lesson-hint { margin-block: 1rem; }
 .lesson-hint summary { cursor: pointer; font-weight: 700; }
+.erp-case { margin-block: 1rem; }
+.case-handoffs { display: grid; gap: .55rem; padding-inline-start: 1.4rem; }
+.case-handoffs li { padding: .55rem .75rem; border: 1px solid var(--line); border-radius: 7px; background: var(--inset); }
+.case-handoffs li::marker { color: var(--link); font-weight: 750; }
+.case-handoffs p { margin: .25rem 0 0; }
 
 #lesson-responses { margin-block: 1.6rem; padding-block: 1.1rem; border-block: 1px solid var(--line); }
 #lesson-responses h2 { margin: 0; font-size: 1.25rem; }
