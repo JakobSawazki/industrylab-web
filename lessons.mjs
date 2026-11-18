@@ -7,7 +7,7 @@ export const lessons = [
     brief: "Berechne Produktions- und Planzeiten in Excel und teste eine veränderte Planungsreserve.",
     check: {"prompt":"Der Stundensatz steht in F1 und soll beim Kopieren der Formel immer aus F1 kommen. Welcher Bezug passt?","choices":["F1","$F1","$F$1"],"correct":2,"feedback":"Zwei Dollarzeichen fixieren Spalte und Zeile."},
     transfer: {"prompt":"Für 120 Teile brauchst du je 1,5 Minuten. Mit 10 % Reserve: Wie viele Stunden planst du?","choices":["3,3 Stunden","3 Stunden","3,1 Stunden"],"correct":0,"feedback":"120 × 1,5 ergibt 180 Minuten, also 3 Stunden. Mit Reserve sind es 3 × 1,10 = 3,3 Stunden."},
-    files: [],
+    files: [{"name":"IndustryLab-01-Excel-Grundlagen-Ausgangsdaten.xlsx","label":"Excel-Ausgangsdaten"}],
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const lessons = [
     brief: "Vergleiche geplante und tatsächliche Produktionsmengen und markiere auffällige Fertigungsaufträge mit einer WENN-Funktion.",
     check: {"prompt":"Geplant waren 250 Stück, produziert wurden 235. Wie groß ist die Abweichung, wenn du Ist minus Soll rechnest?","choices":["−15 Stück","15 Stück","485 Stück"],"correct":0,"feedback":"235 minus 250 ergibt −15. Die Produktion liegt unter Plan."},
     transfer: {"prompt":"Die Produktion erreicht genau die geplanten 250 Stück. Welche Bedingung meldet auch bei Gleichstand „Erreicht“?","choices":["Ist > Soll","Ist < Soll","Ist ≥ Soll"],"correct":2,"feedback":"Mit ≥ zählt auch der Fall, dass Ist und Soll gleich groß sind."},
-    files: [],
+    files: [{"name":"IndustryLab-02-Produktionsdaten-Ausgangsdaten.xlsx","label":"Excel-Ausgangsdaten"}],
   },
   {
     id: 3,
