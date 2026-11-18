@@ -181,6 +181,30 @@ export const units = Object.fromEntries(plans.map(([id, goal, data, steps, resul
 ]));
 
 export const extensions = {
+  2: [
+    {
+      minutes: 10,
+      title: "Schichtmengen mit SUMME und MITTELWERT auswerten",
+      data: "Die drei Aufträge in deiner Excel-Datei gehören zur selben Schicht. Sollmengen stehen in B8:B10, Istmengen in C8:C10.",
+      steps: [
+        "Berechne mit SUMME das Gesamtsoll und das Gesamtist in zwei freien Zellen. Ermittle daraus die Abweichung der Schicht in Stück.",
+        "Berechne mit MITTELWERT die durchschnittliche Ist-Menge je Auftrag. Zeige sie mit zwei Nachkommastellen.",
+        "Schreibe einen Satz für die Schichtleitung. Nenne das Gesamtist gegenüber dem Gesamtsoll und erkläre, worauf sich der Durchschnitt bezieht."
+      ],
+      result: "Vier Kennzahlen mit Einheit und eine kurze Auswertung für die Schichtleitung."
+    },
+    {
+      minutes: 10,
+      title: "Prüfregeln mit UND und ODER vergleichen",
+      data: "Ergänze neben dem Status eine Spalte „Ausschuss (Stück)“.\nP-2701 | 2\nP-2702 | 3\nP-2703 | 1\nDie beiden Bedingungen lauten „Ist unter Soll“ und „mindestens 3 Ausschussteile“.",
+      steps: [
+        "Erstelle zwei Prüfspalten. In der ersten soll WENN mit UND „Prüfen“ anzeigen, wenn beide Bedingungen zutreffen. In der zweiten soll WENN mit ODER schon bei mindestens einer erfüllten Bedingung „Prüfen“ anzeigen. Verwende sonst jeweils „OK“.",
+        "Prüfe alle drei Aufträge. Ändere anschließend bei P-2703 nur den Ausschuss auf genau 3 Stück. Soll und Ist bleiben gleich.",
+        "Vergleiche beide Anzeigen für P-2703. Begründe, welche Regel auch bei erreichter Sollmenge eine Auffälligkeit meldet."
+      ],
+      result: "Zwei Formeln, ein Grenztest und eine Erklärung für die unterschiedlichen Meldungen."
+    }
+  ],
   15: [
     {
       minutes: 10,
