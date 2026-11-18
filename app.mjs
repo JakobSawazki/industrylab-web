@@ -6,6 +6,7 @@ import { scenarioPanel } from "./scenarios.mjs";
 
 const find = id => document.getElementById(id);
 const cards = find("cards");
+const openOnly = find("open-only");
 const continueLink = find("continue");
 const lessonPage = find("lesson");
 const lessonHref = id => "./einheit.html?nr=" + id;
@@ -118,12 +119,15 @@ function searchKey(text) {
 function drawCards() {
   if (!cards) return;
   const terms = searchKey(find("search").value).split(/\s+/).filter(Boolean);
-  const matching = lessons.filter(lesson => {
+  const candidates = lessons.filter(lesson => {
     const text = searchKey([lesson.title, lesson.brief, fieldLabel(lesson)].join(" "));
     return (!activeField || lesson.fields.includes(activeField)) && terms.every(term => text.includes(term));
   });
 
-  find("results").textContent = matching.length + (matching.length === 1 ? " Einheit" : " Einheiten");
+  const matching = openOnly.checked ? candidates.filter(lesson => !isComplete(lesson.id)) : candidates;
+  const count = matching.length + (matching.length === 1 ? " Einheit" : " Einheiten");
+  const emptyMessage = candidates.length ? "Alle passenden Aufgabenchecks sind bestanden." : "Keine Einheit passt zu deiner Auswahl.";
+  find("results").textContent = matching.length ? count : emptyMessage;
   const lessonCards = matching.map((lesson, index) => {
     const card = element("article", "", "card");
     const completed = isComplete(lesson.id);
@@ -148,7 +152,7 @@ function drawCards() {
     card.append(link);
     return card;
   });
-  cards.replaceChildren(...(lessonCards.length ? lessonCards : [element("p", "Zu deiner Suche gibt es keine passenden Themen.")]));
+  cards.replaceChildren(...lessonCards);
 }
 
 function refresh() {
@@ -410,6 +414,15 @@ if (cards) {
     });
     find("filters").append(button);
   }
+  openOnly.checked = route.get("offen") === "1";
+  openOnly.closest("label").hidden = false;
+  openOnly.addEventListener("change", () => {
+    const url = new URL(location.href);
+    if (openOnly.checked) url.searchParams.set("offen", "1");
+    else url.searchParams.delete("offen");
+    history.replaceState(history.state, "", url);
+    drawCards();
+  });
   find("search").addEventListener("input", drawCards);
 }
 

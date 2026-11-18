@@ -602,6 +602,10 @@ legend { font-weight: 750; }
 .home-fields a { display: grid; gap: .25rem; padding: 1rem; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 750; }
 .home-fields a:hover { background: var(--selected); text-decoration: underline; }
 .home-fields span { color: var(--link); font-size: .8rem; }
+.path-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; }
+.path-open { display: inline-flex; align-items: center; gap: .5rem; font-size: .88rem; font-weight: 700; cursor: pointer; }
+.path-open[hidden] { display: none; }
+.path-open input { width: 1.05em; height: 1.05em; margin: 0; accent-color: var(--link); }
 .path-results { font-size: .88rem; }
 .card-photo { width: 100%; height: auto; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 7px; border: 1px solid var(--line); }
 .lesson-jumps { display: flex; flex-wrap: wrap; gap: .4rem .6rem; margin: 1.1rem 0; }
