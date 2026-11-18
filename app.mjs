@@ -340,8 +340,9 @@ function showLesson(lesson) {
     );
     workspace.append(help);
   }
-  drawLessonPlan(units[lesson.id], extensions[lesson.id] ?? []);
-  find("scenario").replaceChildren(scenarioPanel(lesson.id));
+  const unit = units[lesson.id];
+  drawLessonPlan(unit, extensions[lesson.id] ?? []);
+  find("scenario").replaceChildren(scenarioPanel(lesson.id, unit.data));
   drawResponses(lesson.id);
 
   const questions = [lesson.check, lesson.transfer];

@@ -136,7 +136,7 @@ export const lessons = [
     title: "Daten importieren und bereinigen",
     brief: "Importiere eine Lieferliste, prüfe Datentypen und untersuche mögliche Dubletten anhand von Belegnummer und Position.",
     check: {"prompt":"Wie importierst du die Artikelnummer 00127, wenn alle fünf Zeichen erhalten bleiben sollen?","choices":["Als Text","Als Ganzzahl","Als Prozentwert"],"correct":0,"feedback":"Artikelnummern sind Kennungen. Beim Import als Text bleiben führende Nullen erhalten."},
-    transfer: {"prompt":"L01/1 und L01/2 enthalten beide den Artikel 00127. Eine zweite Zeile für L01/1 ist vollständig identisch. Welche Zeile entfernst du?","choices":["Nur die wiederholte Zeile für L01/1","Alle Zeilen mit Artikel 00127","Die Position L01/2"],"correct":0,"feedback":"Die identische Wiederholung ist die Dublette. L01/2 ist trotz gleicher Artikelnummer eine eigene Position."},
+    transfer: {"prompt":"In einer anderen Liste steht für L03/1 einmal Menge 4 und einmal Menge 6. L03/2 enthält denselben Artikel. Was tust du?","choices":["Die Mengen für L03/1 anhand des Lieferscheins klären und L03/2 behalten","Eine der beiden Zeilen für L03/1 sofort löschen","Alle Zeilen mit derselben Artikelnummer zusammenfassen"],"correct":0,"feedback":"Für L03/1 liegen widersprüchliche Mengen vor. Die zweite Position ist ein eigener Datensatz."},
     files: [{"name":"IndustryLab-14-Lieferliste-Rohdaten.csv","label":"CSV-Rohdaten"}],
   },
   {

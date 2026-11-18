@@ -141,10 +141,10 @@ const plans = [
     "Dubletten und fehlende Werte bei einem CSV-Import behandeln.",
     "Beleg;Position;Artikel;Menge\nL01;1;00127;10\nL01;1;00127;10\nL01;2;00127;5\nL02;1;00404;",
     ["Lade die CSV-Rohdaten herunter. Importiere sie in Excel über „Daten“ → „Aus Text/CSV“. Wähle UTF-8 und Semikolon. Öffne „Daten transformieren“ und stelle „Artikel“ vor dem Laden auf Text.",
-      "Entferne nur die identische Dublette anhand von Beleg und Position.",
-      "Markiere die fehlende Menge als ungeklärt und protokolliere die Änderungen."],
+      "Suche gleiche Paare aus Beleg und Position. Vergleiche bei solchen Paaren auch Artikel und Menge. Entferne nur vollständig identische Wiederholungen.",
+      "Lass die fehlende Menge leer und halte den Klärungsbedarf im Protokoll fest. Kontrolliere im Browser auch den Fall mit zwei verschiedenen Mengen für dieselbe Position."],
     "Drei verbliebene Datenzeilen, erhaltene Nullen und ein Änderungsprotokoll.",
-    "In Power Query kann ein automatisch gesetzter Schritt „Geänderter Typ“ führende Nullen entfernen. Entferne diesen Schritt, bevor du „Artikel“ als Text einstellst. Die gleiche Artikelnummer kann in mehreren Positionen vorkommen."
+    "In Power Query kann ein automatisch gesetzter Schritt „Geänderter Typ“ führende Nullen entfernen. Entferne diesen Schritt, bevor du „Artikel“ als Text einstellst. Wenn Beleg und Position gleich sind, die Mengen aber abweichen, behältst du beide Zeilen zur Klärung."
   ],
   [15,
     "Einen KI-Formelvorschlag mit fachlichen Testfällen überprüfen.",

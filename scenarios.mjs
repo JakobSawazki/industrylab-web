@@ -258,9 +258,76 @@ function orderLab() {
   return panel;
 }
 
-export function scenarioPanel(id) {
+export function auditDeliveryRows(rows) {
+  const versionsByPosition = new Map();
+  const uniqueRows = [];
+  let duplicateCount = 0;
+  for (const row of rows) {
+    const [deliveryNote, position, article, amount] = row;
+    const key = deliveryNote + "/" + position;
+    const content = article + ";" + amount;
+    const versions = versionsByPosition.get(key) ?? new Set();
+    if (versions.has(content)) {
+      duplicateCount++;
+      continue;
+    }
+    versions.add(content);
+    versionsByPosition.set(key, versions);
+    uniqueRows.push(row);
+  }
+  const conflicts = [...versionsByPosition].filter(([, versions]) => versions.size > 1).map(([key]) => key);
+  return { rows: uniqueRows, duplicateCount, conflicts };
+}
+
+function deliveriesLab(data) {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Bereinigung im Browser kontrollieren";
+  const intro = document.createElement("p");
+  intro.textContent = "Sage zuerst voraus, welche Zeilen du behalten würdest. Vergleiche dann die Originalliste mit einem Fall, in dem für dieselbe Position zwei verschiedene Mengen vorliegen.";
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const sample = comparisonField(fields, "Prüffall", [
+    ["original", "Originalliste"],
+    ["conflict", "Zweite Zeile mit Menge 12 statt 10"]
+  ]);
+  const form = document.createElement("form");
+  const submit = document.createElement("button");
+  submit.type = "submit";
+  submit.textContent = "Bereinigung prüfen";
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  const result = document.createElement("div");
+  // The lesson data is a fixed exercise excerpt with unquoted fields.
+  const [columns, ...rows] = data.split("\n").map(line => line.split(";"));
+  sample.addEventListener("change", () => {
+    result.replaceChildren();
+    status.textContent = "";
+  });
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const input = sample.value === "conflict"
+      ? rows.map((row, index) => index === 1 ? [...row.slice(0, 3), "12"] : row)
+      : rows;
+    const checked = auditDeliveryRows(input);
+    const note = checked.conflicts.length
+      ? "Widerspruch bei " + checked.conflicts.join(", ") + ". Kläre die Menge anhand des Lieferscheins."
+      : "Die Positionen sind nach der Bereinigung eindeutig.";
+    const duplicates = checked.duplicateCount === 1 ? "identische Dublette" : "identische Dubletten";
+    status.textContent = checked.duplicateCount + " " + duplicates + " entfernt. " + note;
+    const display = checked.rows.map(([deliveryNote, position, article, amount]) => [deliveryNote, position, article, amount || "offen"]);
+    result.replaceChildren(scenarioTable("Zeilen nach der Dublettenprüfung", columns, display));
+  });
+  form.append(fields, submit, status, result);
+  panel.append(summary, intro, form);
+  return panel;
+}
+
+export function scenarioPanel(id, data) {
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
+  if (id === 14) return deliveriesLab(data);
   const panel = document.createElement("details");
   const scenario = scenarios[id];
   if (!scenario) {
