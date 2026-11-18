@@ -553,9 +553,24 @@ legend { font-weight: 750; }
 
 #lesson-plan h3, #quiz h3 { margin: 1rem 0 .5rem; font-size: 1rem; }
 #lesson-files:empty { display: none; }
-.lesson-back { margin-top: 1.5rem; }
-.lesson-back a, .lesson-neighbors a { color: var(--link); font-weight: 700; text-underline-offset: .18em; }
-.lesson-page { max-width: 860px; margin: 1rem auto 2rem; }
+.lesson-breadcrumb { max-width: 860px; margin: .75rem auto .55rem; }
+.lesson-breadcrumb ol { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .45rem; margin: 0; padding: 0; list-style: none; }
+.lesson-breadcrumb li { min-width: 0; }
+.lesson-breadcrumb a { display: inline-block; padding: .25rem .35rem; border-radius: 5px; color: var(--link); font-size: .9rem; font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+.lesson-breadcrumb a[aria-current="page"] { color: var(--ink); }
+.lesson-breadcrumb a:hover { background: var(--selected); }
+.lesson-breadcrumb li + li:not([hidden]) { display: flex; align-items: baseline; gap: .4rem; }
+.lesson-breadcrumb li + li::before {
+  content: "";
+  flex: none;
+  width: .42rem;
+  height: .42rem;
+  border: solid var(--edge);
+  border-width: 0 2px 2px 0;
+  transform: translateY(-.08rem) rotate(-45deg);
+}
+.lesson-neighbors a { color: var(--link); font-weight: 700; text-underline-offset: .18em; }
+.lesson-page { max-width: 860px; margin: 0 auto 2rem; }
 .lesson-page header h1 { font-size: clamp(1.75rem, 5vw, 3rem); }
 .lesson-neighbors { display: flex; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--line); margin-top: 1.5rem; padding-top: 1rem; }
 .lesson-neighbors a { max-width: 100%; overflow-wrap: anywhere; }

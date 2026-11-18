@@ -41,7 +41,12 @@
     </div>
   </div></header>
   <main id="main" class="shell">
-    <nav class="lesson-back" aria-label="Lernpfad"><a href="./lernpfad.html">← Alle Einheiten</a></nav>
+    <nav class="lesson-breadcrumb" aria-label="Brotkrümelnavigation">
+      <ol>
+        <li><a href="./lernpfad.html">Lernpfad</a></li>
+        <li id="lesson-breadcrumb-item" hidden><a id="lesson-breadcrumb-current" href="#main" aria-current="page"></a></li>
+      </ol>
+    </nav>
     <article class="section panel lesson-page" id="lesson" hidden>
       <header class="lesson-heading">
         <div>

@@ -287,6 +287,8 @@ function drawResponses(lessonId) {
 
 function showLesson(lesson) {
   document.title = lesson.title + " – IndustryLab";
+  find("lesson-breadcrumb-current").textContent = "Einheit " + lesson.id + ": " + lesson.title;
+  find("lesson-breadcrumb-item").hidden = false;
   find("lesson-label").textContent = "Einheit " + lesson.id + " · " + fieldLabel(lesson);
   find("lesson-title").textContent = lesson.title;
   find("lesson-brief").textContent = lesson.brief;
