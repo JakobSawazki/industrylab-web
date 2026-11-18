@@ -126,9 +126,11 @@ function drawCards() {
   find("results").textContent = matching.length + (matching.length === 1 ? " Einheit" : " Einheiten");
   const lessonCards = matching.map((lesson, index) => {
     const card = element("article", "", "card");
-    const action = element("a", isComplete(lesson.id) ? "Wiederholen" : "Einheit öffnen", "button");
-    action.href = lessonHref(lesson.id);
-    action.setAttribute("aria-label", action.textContent + " · " + lesson.title);
+    const completed = isComplete(lesson.id);
+    const action = completed ? "Wiederholen" : "Einheit öffnen";
+    const link = element("a", "", "card-link");
+    link.href = lessonHref(lesson.id);
+    link.setAttribute("aria-label", action + " · " + lesson.title);
     const photo = element("img", "", "card-photo");
     photo.alt = "";
     photo.width = 960;
@@ -136,13 +138,14 @@ function drawCards() {
     photo.loading = index < 3 ? "eager" : "lazy";
     photo.decoding = "async";
     photo.src = "./kapitelbilder/" + lessonImageName(lesson.id);
-    card.append(
+    link.append(
       photo,
-      element("p", "Einheit " + lesson.id + " · " + fieldLabel(lesson) + (isComplete(lesson.id) ? " · Bestanden" : ""), "eyebrow"),
+      element("p", "Einheit " + lesson.id + " · " + fieldLabel(lesson) + (completed ? " · Bestanden" : ""), "eyebrow"),
       element("h3", lesson.title),
       element("p", lesson.brief),
-      action
+      element("span", action, "button")
     );
+    card.append(link);
     return card;
   });
   cards.replaceChildren(...(lessonCards.length ? lessonCards : [element("p", "Zu deiner Suche gibt es keine passenden Themen.")]));

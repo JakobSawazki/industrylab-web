@@ -375,14 +375,19 @@ h2 { font-size: clamp(1.55rem, 4vw, 2.15rem); letter-spacing: -.045em; margin: 0
   box-shadow: inset 0 -2px var(--accent), 0 2px 5px var(--control-shadow);
 }
 .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.card, .panel {
+.card-link, .panel {
   background: linear-gradient(145deg, var(--surface) 64%, var(--inset));
   border: 1px solid var(--line);
   border-radius: 11px;
   padding: 20px;
   box-shadow: inset 0 1px var(--bevel), 0 4px 10px var(--shadow);
 }
-.card { min-height: 184px; display: flex; flex-direction: column; gap: 10px; }
+.card { min-height: 184px; display: flex; }
+.card-link { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; text-decoration: none; }
+@media (hover: hover) {
+  .card-link:hover { border-color: var(--edge); box-shadow: inset 0 1px var(--bevel), 0 6px 16px var(--shadow); }
+  .card-link:hover .button { filter: brightness(1.14); }
+}
 .card h3 { font-size: 1.15rem; letter-spacing: -.024em; margin: 0; }
 .card p { font-size: .92rem; margin: 0; }
 .card .eyebrow { color: var(--link); font-size: .73rem; }
