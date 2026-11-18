@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interaktive Übungen und Unterrichtsmaterial für Industriekaufleute im zweiten Ausbildungsjahr.">
+  <title>Lerneinheit – IndustryLab</title>
+  <script src="./theme.js"></script>
+  <link rel="icon" type="image/png" href="./industrylab-logo.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt</a>
+  <header class="top"><div class="shell bar">
+    <a class="brand" href="./#top" aria-label="IndustryLab – Startseite"><img class="brand-mark" src="./industrylab-logo.png" width="72" height="72" alt=""> <span>Industry<span class="brand-accent">Lab</span></span></a>
+    <nav aria-label="Hauptnavigation">
+      <a href="./lernpfad.html">Lernpfad</a><a href="./#material">Downloads</a><button id="open-progress" class="nav-action" type="button" aria-haspopup="dialog" aria-controls="profile">Mein Lernstand</button>
+    </nav>
+    <div class="header-tools">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dunkelmodus" aria-pressed="false" title="Hellen oder dunklen Modus wählen" hidden>
+        <span class="theme-sun" aria-hidden="true"></span><span class="theme-moon" aria-hidden="true"></span>
+      </button>
+      <button class="appearance-toggle" id="appearance-toggle" type="button" aria-label="Darstellung anpassen" aria-haspopup="dialog" aria-controls="appearance" title="Darstellung anpassen" hidden>
+        <span class="sliders-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <button class="backup-icon" id="quick-export" type="button" aria-label="Sicherung speichern" title="Sicherung speichern">
+        <span class="disk-icon" aria-hidden="true"></span>
+      </button>
+      <button class="backup-icon" id="quick-import" type="button" aria-label="Sicherung laden" title="Sicherung laden">
+        <span class="folder-icon" aria-hidden="true"></span>
+      </button>
+      <button class="points" id="top-points" type="button" aria-haspopup="dialog" aria-controls="profile" aria-label="Lernprofil öffnen · 0 EP">0 EP</button>
+    </div>
+  </div></header>
+  <main id="main" class="shell">
+    <nav class="lesson-back" aria-label="Lernpfad"><a href="./lernpfad.html">← Alle Einheiten</a></nav>
+    <article class="section panel lesson-page" id="lesson" hidden>
+      <header class="lesson-heading">
+        <div>
+          <p id="lesson-label" class="eyebrow"></p>
+          <h1 id="lesson-title" class="page-heading"></h1>
+          <p id="lesson-brief"></p>
+        </div>
+        <img id="lesson-photo" width="960" height="640" alt="" decoding="async">
+      </header>
+      <nav class="lesson-jumps" aria-label="In dieser Einheit">
+        <a href="#lesson-plan">Auftrag</a>
+        <a href="#lesson-responses">Ergebnisse</a>
+        <a href="#quiz">Aufgabencheck</a>
+      </nav>
+      <div id="lesson-workspace" class="lesson-hint"></div>
+      <div id="lesson-files"></div>
+      <section id="lesson-plan"></section>
+      <div id="scenario"></div>
+      <section id="lesson-responses"></section>
+      <form id="quiz"></form>
+      <nav class="lesson-neighbors" id="lesson-neighbors" aria-label="Weitere Einheiten"></nav>
+    </article>
+    <p id="lesson-unavailable" hidden>Diese Einheit ist nicht verfügbar. Wähle eine Einheit im Lernpfad.</p>
+    <noscript>Aktiviere JavaScript für die Aufgaben und den Lernstand.</noscript>
+  </main>
+  <footer class="shell footer">
+    <span>IndustryLab · Informatik für Industriekaufleute</span>
+    <a class="footer-credit" href="https://jakobsawazki.github.io/sawazki-electronics/">Designed by Sawazki Electronics</a>
+  </footer>
+
+  <dialog id="appearance" aria-labelledby="appearance-title">
+    <div class="dialog-top">
+      <div>
+        <p class="eyebrow" id="appearance-mode"></p>
+        <h2 id="appearance-title" tabindex="-1">Darstellung</h2>
+      </div>
+      <button id="close-appearance" class="secondary dialog-close-icon" type="button" aria-label="Schließen" title="Schließen">×</button>
+    </div>
+    <div id="appearance-fields"></div>
+    <p id="appearance-status" role="status"></p>
+    <div class="actions appearance-actions">
+      <button id="reset-appearance" class="secondary" type="button">Zurücksetzen</button>
+      <button id="done-appearance" type="button">Fertig</button>
+    </div>
+  </dialog>
+
+  <dialog id="profile" aria-labelledby="profile-title">
+    <div class="dialog-top">
+      <h2 id="profile-title">Dein Lernprofil</h2>
+      <button id="close-profile" class="secondary dialog-close-icon" type="button" aria-label="Schließen" title="Schließen">×</button>
+    </div>
+    <form id="profile-form">
+      <p>Dein Kürzel und deine Klasse sind freiwillig. Sie werden in diesem Browser und in deiner Sicherungsdatei gespeichert.</p>
+      <div class="profile-fields">
+        <label for="student-code">Schülerkürzel
+          <input id="student-code" name="studentCode" type="text" maxlength="24" autocomplete="off" spellcheck="false" placeholder="z. B. A.MÜL">
+        </label>
+        <label for="class-name">Klasse
+          <input id="class-name" name="className" type="text" maxlength="24" autocomplete="off" spellcheck="false" placeholder="z. B. KI2">
+        </label>
+      </div>
+      <button type="submit">Profil speichern</button>
+      <p id="profile-status" role="status"></p>
+    </form>
+    <section class="profile-progress" aria-labelledby="profile-progress-title">
+      <h3 id="profile-progress-title">Mein Lernstand</h3>
+      <p id="balance"></p>
+      <progress id="profile-progress" max="17" value="0" aria-label="Bestandene Aufgabenchecks"></progress>
+      <ul class="ledger" id="ledger"></ul>
+      <p>Eine Sicherung enthält dein freiwilliges Profil, deinen Lernstand und deine eingegebenen Antworten.</p>
+      <div class="actions">
+        <button id="export" type="button">Sicherung speichern</button>
+        <button id="import" class="secondary" type="button">Sicherung laden</button>
+      </div>
+      <p id="backup-status" role="status" tabindex="-1"></p>
+    </section>
+  </dialog>
+
+  <input type="file" id="backup-file" accept=".json,application/json" hidden>
+</body>
+</html>

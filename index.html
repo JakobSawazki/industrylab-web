@@ -13,15 +13,24 @@
 <body>
   <a class="skip" href="#main">Zum Inhalt</a>
   <header class="top"><div class="shell bar">
-    <a class="brand" href="./#top" aria-label="IndustryLab – Startseite"><img class="brand-mark" src="./industrylab-logo.png" width="52" height="52" alt=""> <span>Industry<span class="brand-accent">Lab</span></span></a>
+    <a class="brand" href="./#top" aria-label="IndustryLab – Startseite"><img class="brand-mark" src="./industrylab-logo.png" width="72" height="72" alt=""> <span>Industry<span class="brand-accent">Lab</span></span></a>
     <nav aria-label="Hauptnavigation">
-      <a href="#lernfelder">Lernpfad</a><a href="#material">Downloads</a><a href="#fortschritt">Mein Lernstand</a>
+      <a href="./lernpfad.html">Lernpfad</a><a href="#material">Downloads</a><button id="open-progress" class="nav-action" type="button" aria-haspopup="dialog" aria-controls="profile">Mein Lernstand</button>
     </nav>
     <div class="header-tools">
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Dunkelmodus" aria-pressed="false" title="Hellen oder dunklen Modus wählen" hidden>
         <span class="theme-sun" aria-hidden="true"></span><span class="theme-moon" aria-hidden="true"></span>
       </button>
-      <a href="#fortschritt" class="points" id="top-points">0 EP</a>
+      <button class="appearance-toggle" id="appearance-toggle" type="button" aria-label="Darstellung anpassen" aria-haspopup="dialog" aria-controls="appearance" title="Darstellung anpassen" hidden>
+        <span class="sliders-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <button class="backup-icon" id="quick-export" type="button" aria-label="Sicherung speichern" title="Sicherung speichern">
+        <span class="disk-icon" aria-hidden="true"></span>
+      </button>
+      <button class="backup-icon" id="quick-import" type="button" aria-label="Sicherung laden" title="Sicherung laden">
+        <span class="folder-icon" aria-hidden="true"></span>
+      </button>
+      <button class="points" id="top-points" type="button" aria-haspopup="dialog" aria-controls="profile" aria-label="Lernprofil öffnen · 0 EP">0 EP</button>
     </div>
   </div></header>
   <main id="main" class="shell">
@@ -30,7 +39,7 @@
         <p class="eyebrow">Industriekaufleute · 2. Ausbildungsjahr</p>
         <h1>Industry<span>Lab</span></h1>
         <p class="intro">Arbeite mit Produktions-, Lager-, Kosten- und Marketingdaten der fiktiven Nagold Components GmbH. Löse Praxisaufgaben und prüfe dein Wissen.</p>
-        <a class="button" id="continue" href="#lernfelder">Lernpfad starten <span aria-hidden="true">↗</span></a>
+        <a class="button" id="continue" href="./lernpfad.html">Lernpfad starten <span aria-hidden="true">↗</span></a>
       </div>
       <div class="hero-progress">
         <p class="eyebrow">Dein Lernstand</p>
@@ -41,45 +50,75 @@
       </div>
     </section>
 
-    <section class="section" id="lernfelder">
-      <div class="section-head"><div><h2>Lernpfad</h2><p>Wähle ein Thema aus den Lernfeldern 6 bis 9.</p></div>
-      <label class="search">Thema suchen<input id="search" type="search" placeholder="z. B. Pivot oder Lager"></label></div>
-      <div id="filters" class="filters" role="group" aria-label="Nach Lernfeld filtern"></div>
-      <p id="results" class="sr-only" role="status"></p>
-      <div id="cards" class="cards"></div>
-      <noscript>Aktiviere JavaScript für Übungen, Downloads und Lernstand.</noscript>
+    <section class="section" aria-labelledby="start-themen">
+      <h2 id="start-themen">Lernfelder</h2>
+      <ul class="home-fields">
+        <li><a href="./lernpfad.html?lf=6"><span>LF 6</span>Produktion</a></li>
+        <li><a href="./lernpfad.html?lf=7"><span>LF 7</span>Logistik</a></li>
+        <li><a href="./lernpfad.html?lf=8"><span>LF 8</span>Kosten</a></li>
+        <li><a href="./lernpfad.html?lf=9"><span>LF 9</span>Marketing</a></li>
+      </ul>
     </section>
 
     <section class="section panel" id="material">
-      <h2>Unterrichtsmaterial</h2><p>Word-Aufgaben und Excel-Ausgangsdaten für die Arbeit im Unterricht.</p>
+      <h2>Unterrichtsmaterial</h2><p>Excel- und CSV-Ausgangsdaten sowie die SQL-Startdatei. Die Arbeitsaufträge stehen in den Einheiten.</p>
       <ul class="material-list" id="downloads"></ul>
     </section>
 
-    <section class="section panel" id="fortschritt">
-      <h2>Mein Lernstand</h2>
-      <p id="balance"></p>
-      <p>Dein Lernstand wird in diesem Browser gespeichert. Mit einer Sicherung kannst du ihn auf einen anderen Rechner mitnehmen.</p>
-      <ul class="ledger" id="ledger"></ul>
-      <div class="actions">
-        <button id="export" type="button">Sicherung speichern</button>
-        <button id="import" class="secondary" type="button">Sicherung laden</button>
-        <input type="file" id="backup-file" accept=".json,application/json" hidden>
-      </div>
-      <p id="backup-status" role="status"></p>
-    </section>
   </main>
   <footer class="shell footer">
     <span>IndustryLab · Informatik für Industriekaufleute</span>
     <a class="footer-credit" href="https://jakobsawazki.github.io/sawazki-electronics/">Designed by Sawazki Electronics</a>
   </footer>
 
-  <dialog id="lesson" aria-labelledby="lesson-title">
-    <div class="dialog-top"><span id="lesson-label" class="eyebrow"></span><button id="close" class="secondary" type="button">Schließen</button></div>
-    <h2 id="lesson-title" tabindex="-1"></h2>
-    <p id="lesson-brief"></p>
-    <div id="lesson-files"></div>
-    <div id="scenario"></div>
-    <form id="quiz"></form>
+  <dialog id="appearance" aria-labelledby="appearance-title">
+    <div class="dialog-top">
+      <div>
+        <p class="eyebrow" id="appearance-mode"></p>
+        <h2 id="appearance-title" tabindex="-1">Darstellung</h2>
+      </div>
+      <button id="close-appearance" class="secondary dialog-close-icon" type="button" aria-label="Schließen" title="Schließen">×</button>
+    </div>
+    <div id="appearance-fields"></div>
+    <p id="appearance-status" role="status"></p>
+    <div class="actions appearance-actions">
+      <button id="reset-appearance" class="secondary" type="button">Zurücksetzen</button>
+      <button id="done-appearance" type="button">Fertig</button>
+    </div>
   </dialog>
+
+  <dialog id="profile" aria-labelledby="profile-title">
+    <div class="dialog-top">
+      <h2 id="profile-title">Dein Lernprofil</h2>
+      <button id="close-profile" class="secondary dialog-close-icon" type="button" aria-label="Schließen" title="Schließen">×</button>
+    </div>
+    <form id="profile-form">
+      <p>Dein Kürzel und deine Klasse sind freiwillig. Sie werden in diesem Browser und in deiner Sicherungsdatei gespeichert.</p>
+      <div class="profile-fields">
+        <label for="student-code">Schülerkürzel
+          <input id="student-code" name="studentCode" type="text" maxlength="24" autocomplete="off" spellcheck="false" placeholder="z. B. A.MÜL">
+        </label>
+        <label for="class-name">Klasse
+          <input id="class-name" name="className" type="text" maxlength="24" autocomplete="off" spellcheck="false" placeholder="z. B. KI2">
+        </label>
+      </div>
+      <button type="submit">Profil speichern</button>
+      <p id="profile-status" role="status"></p>
+    </form>
+    <section class="profile-progress" aria-labelledby="profile-progress-title">
+      <h3 id="profile-progress-title">Mein Lernstand</h3>
+      <p id="balance"></p>
+      <progress id="profile-progress" max="17" value="0" aria-label="Bestandene Aufgabenchecks"></progress>
+      <ul class="ledger" id="ledger"></ul>
+      <p>Eine Sicherung enthält dein freiwilliges Profil, deinen Lernstand und deine eingegebenen Antworten.</p>
+      <div class="actions">
+        <button id="export" type="button">Sicherung speichern</button>
+        <button id="import" class="secondary" type="button">Sicherung laden</button>
+      </div>
+      <p id="backup-status" role="status" tabindex="-1"></p>
+    </section>
+  </dialog>
+
+  <input type="file" id="backup-file" accept=".json,application/json" hidden>
 </body>
 </html>
