@@ -96,10 +96,10 @@ const plans = [
   ],
   [11,
     "Kunden, Aufträge und Artikel mit Schlüsseln modellieren.",
-    "K01 erteilt O101 und O103, K02 erteilt O102. O101 enthält A01 und A02. O103 enthält A01.",
+    "K01 · Hahn GmbH erteilt O101 und O103. K02 · Weller KG erteilt O102.\nFür den Positionsauszug betrachten wir O101 mit Position 1 (A01) und Position 2 (A02) sowie O103 mit Position 1 (A01).",
     ["Skizziere Tabellen für Kunden, Aufträge, Artikel und Auftragspositionen.",
       "Markiere die Primärschlüssel und zeichne die Fremdschlüsselbeziehungen ein.",
-      "Ergänze die drei Positionszeilen und erkläre, warum eine Artikelnummer mehrfach vorkommen kann."],
+      "Ergänze die drei Positionszeilen. Prüfe im Browser, welche Felder zusammen eine Zeile eindeutig identifizieren und warum die Artikelnummer mehrfach vorkommen darf."],
     "Vier verknüpfte Tabellen und zwei getrennte Positionszeilen für O101.",
     "Eine Position verweist auf einen Auftrag und einen Artikel. Die Artikelnummer allein identifiziert keine Position."
   ],

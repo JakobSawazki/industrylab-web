@@ -442,9 +442,9 @@ legend { font-weight: 750; }
 .scenario-fields label { display: grid; gap: .3rem; font-size: .86rem; }
 .scenario-fields input, .scenario-fields select { width: 100%; padding: .4rem; }
 .sql-lab pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: .7rem; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); }
-.sql-lab table { border-collapse: collapse; width: 100%; text-align: start; }
-.sql-lab caption { text-align: start; font-weight: 750; margin-block: .4rem; }
-.sql-lab th, .sql-lab td { border-block-end: 1px solid var(--line); padding: .35rem .5rem; text-align: start; }
+.scenario table { border-collapse: collapse; width: 100%; text-align: start; }
+.scenario caption { text-align: start; font-weight: 750; margin-block: .4rem; }
+.scenario th, .scenario td { border-block-end: 1px solid var(--line); padding: .35rem .5rem; text-align: start; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @media (max-width: 920px) {

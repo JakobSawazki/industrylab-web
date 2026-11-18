@@ -110,6 +110,76 @@ const sqlOrders = [
   { id: "O103", kunden_id: "K01", status: "offen" }
 ];
 
+const positionRows = [["O101", "1", "A01"], ["O101", "2", "A02"], ["O103", "1", "A01"]];
+
+function scenarioTable(title, columns, rows) {
+  const table = document.createElement("table");
+  table.createCaption().textContent = title;
+  const heading = table.createTHead().insertRow();
+  for (const column of columns) {
+    const header = document.createElement("th");
+    header.scope = "col";
+    header.textContent = column;
+    heading.append(header);
+  }
+  const body = table.createTBody();
+  for (const row of rows) {
+    const line = body.insertRow();
+    for (const value of row) line.insertCell().textContent = value;
+  }
+  return table;
+}
+
+function comparisonField(parent, caption, entries) {
+  const label = document.createElement("label");
+  label.textContent = caption;
+  const select = document.createElement("select");
+  for (const [value, title] of entries) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = title;
+    select.append(option);
+  }
+  label.append(select);
+  parent.append(label);
+  return select;
+}
+
+function positionLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Primärschlüssel an Auftragspositionen testen";
+  const intro = document.createElement("p");
+  intro.textContent = "Wähle eine Spalte oder eine Kombination. Sage voraus, welche Zeilen denselben Schlüssel hätten.";
+  const table = scenarioTable("Auszug aus den Auftragspositionen", ["Auftrag", "Position", "Artikel"], positionRows);
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const candidates = [
+    ["Position", [1]], ["Auftrag", [0]], ["Artikel", [2]], ["Auftrag und Position", [0, 1]]
+  ];
+  const choice = comparisonField(fields, "Möglicher Primärschlüssel", candidates.map(([title], index) => [index, title]));
+  const form = document.createElement("form");
+  const test = document.createElement("button");
+  test.type = "submit";
+  test.textContent = "Schlüssel testen";
+  const result = document.createElement("p");
+  result.setAttribute("role", "status");
+  choice.addEventListener("change", () => { result.textContent = ""; });
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const [, columns] = candidates[choice.selectedIndex];
+    const keys = positionRows.map(row => columns.map(index => row[index]).join(" / "));
+    const duplicates = [...new Set(keys.filter((key, index) => keys.indexOf(key) !== index))];
+    result.textContent = duplicates.length
+      ? "Mehrfach vergeben: " + duplicates.join(", ") + ". Diese Auswahl unterscheidet die Zeilen nicht eindeutig."
+      : "Eindeutig im Auszug: " + keys.join(", ") + ". In jedem Auftrag darf eine Positionsnummer nur einmal vorkommen.";
+  });
+  form.append(fields, test, result);
+  panel.append(summary, intro, table, form);
+  return panel;
+}
+
 export function orderQuery(status, joinKey) {
   if (!["", "offen", "geliefert"].includes(status) || !["", "kunden_id", "id"].includes(joinKey)) {
     throw new Error("Unbekannter Abfragebaustein");
@@ -141,27 +211,13 @@ function orderLab() {
   const summary = document.createElement("summary");
   summary.textContent = "Aufträge mit SQL abfragen";
   const intro = document.createElement("p");
-  intro.textContent = "Wähle einen Status und eine Verknüpfung. Sage die Treffer voraus und prüfe sie an den Übungsdaten.";
+  intro.textContent = "Hier verwendest du dieselben Kunden und Aufträge wie in Einheit 11. Wähle einen Status und eine Verknüpfung und sage die Treffer voraus.";
   const form = document.createElement("form");
   const fields = document.createElement("div");
   fields.className = "scenario-fields";
 
-  function choice(caption, entries) {
-    const label = document.createElement("label");
-    label.textContent = caption;
-    const select = document.createElement("select");
-    for (const [value, title] of entries) {
-      const option = document.createElement("option");
-      option.value = value;
-      option.textContent = title;
-      select.append(option);
-    }
-    label.append(select);
-    fields.append(label);
-    return select;
-  }
-  const filter = choice("Status (WHERE)", [["", "Alle"], ["offen", "Offen"], ["geliefert", "Geliefert"]]);
-  const join = choice("Verknüpfung (JOIN)", [
+  const filter = comparisonField(fields, "Status (WHERE)", [["", "Alle"], ["offen", "Offen"], ["geliefert", "Geliefert"]]);
+  const join = comparisonField(fields, "Verknüpfung (JOIN)", [
     ["", "Nur Auftragsnummern"],
     ["kunden_id", "Kunden-ID → Kunden-ID"],
     ["id", "Auftragsnummer → Kunden-ID"]
@@ -193,21 +249,7 @@ function orderLab() {
       return;
     }
 
-    const table = document.createElement("table");
-    table.createCaption().textContent = "Treffer der Abfrage";
-    const heading = table.createTHead().insertRow();
-    for (const column of columns) {
-      const header = document.createElement("th");
-      header.scope = "col";
-      header.textContent = column;
-      heading.append(header);
-    }
-    const body = table.createTBody();
-    for (const row of rows) {
-      const line = body.insertRow();
-      for (const value of row) line.insertCell().textContent = value;
-    }
-    result.replaceChildren(table);
+    result.replaceChildren(scenarioTable("Treffer der Abfrage", columns, rows));
   });
 
   updateQuery();
@@ -217,6 +259,7 @@ function orderLab() {
 }
 
 export function scenarioPanel(id) {
+  if (id === 11) return positionLab();
   if (id === 12) return orderLab();
   const panel = document.createElement("details");
   const scenario = scenarios[id];

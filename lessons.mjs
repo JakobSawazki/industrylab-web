@@ -106,7 +106,7 @@ export const lessons = [
     title: "Datenbanken kennenlernen",
     brief: "Entwirf Tabellen für Kunden, Aufträge und Artikel. Verknüpfe die Daten über Schlüssel.",
     check: {"prompt":"Ein Kunde kann viele Aufträge haben. Wo steht die Kunden-ID als Fremdschlüssel?","choices":["In der Tabelle Aufträge","Als Liste aller Aufträge in einer Zelle der Kundentabelle","In einer separaten Kopie jeder Kundentabelle"],"correct":0,"feedback":"Jeder Auftrag verweist auf genau den zugehörigen Kundeneintrag."},
-    transfer: {"prompt":"Auftrag O101 und Auftrag O103 enthalten jeweils eine Position 1. Welcher Schlüssel identifiziert die beiden Zeilen eindeutig?","choices":["Auftragsnummer zusammen mit Positionsnummer","Nur die Positionsnummer","Nur die Artikelnummer"],"correct":0,"feedback":"Die Positionsnummer beginnt je Auftrag neu. Zusammen mit der Auftragsnummer ist sie eindeutig."},
+    transfer: {"prompt":"In einem neuen Fall enthält Auftrag O105 die Positionen 1 und 2. Auch Auftrag O106 hat eine Position 2. Wie findest du genau die Position 2 aus O105?","choices":["Auftragsnummer O105 und Positionsnummer 2 zusammen","Nur die Positionsnummer 2","Nur die Auftragsnummer O105"],"correct":0,"feedback":"Die Auftragsnummer grenzt auf einen Auftrag ein. Die Positionsnummer unterscheidet die Zeilen innerhalb dieses Auftrags."},
     files: [],
   },
   {
