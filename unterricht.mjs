@@ -86,13 +86,18 @@ const plans = [
     "Bestellungen durch Klicks als Prozentwert. Für den Umsatz je Werbe-Euro teile den Umsatz durch die Werbekosten. Bei einem Nenner von 0 bleibt die betreffende Kennzahl offen."
   ],
   [10,
-    "Umsatzverlauf und Kennzahlen verständlich darstellen.",
+    "Die Geschäftsleitung möchte den Umsatzverlauf von Januar bis Juni auf einen Blick sehen. Zeige, welche Veränderungen besonders auffallen.",
     "Umsatz in €: Jan 12.000, Feb 14.000, Mär 11.000, Apr 15.000, Mai 16.000, Jun 13.000.",
-    ["Prüfe in der Excel-Ausgangsdatei die Reihenfolge der Monate und erstelle ein Liniendiagramm.",
-      "Zeige Gesamtumsatz und stärksten Monat oberhalb des Diagramms.",
-      "Benenne die stärksten Rückgänge zum Vormonat und formuliere eine Frage nach ihrer Ursache."],
-    "Ein beschriftetes Diagramm, zwei Kennzahlen und eine Beobachtung mit Zahlen.",
-    "Berechne die Differenzen zum Vormonat. Mehrere Rückgänge können gleich groß sein."
+    ["Markiere in der Excel-Ausgangsdatei A7:B13 und erstelle ein Liniendiagramm. Setze Januar bis Juni auf die Zeitachse und beschrifte die Wertachse in Euro.",
+      "Zeige Gesamtumsatz und stärksten Monat oberhalb des Diagramms. Berechne in Spalte C die Veränderung zum Vormonat ab Februar.",
+      "Benenne die stärksten Rückgänge mit Monaten und Beträgen. Formuliere eine Frage zu den zusätzlichen Daten, die du zur Untersuchung brauchst."],
+    "Ein Dashboard mit Monatsverlauf, zwei Kennzahlen, den stärksten Rückgängen und einer offenen Frage.",
+    "Berechne für jeden Monat ab Februar den aktuellen Umsatz minus den Vormonatsumsatz. Mehrere Rückgänge können gleich groß sein.",
+    { criteria: [
+      ["Diagrammwahl", "Die Linie zeigt den Verlauf. Alle sechs Monate stehen chronologisch auf der Zeitachse und die Wertachse ist in Euro beschriftet."],
+      ["Datenabgleich", "Die Linie stimmt an den Tiefpunkten und am höchsten Punkt mit der Tabelle überein. Gesamtumsatz und stärkster Monat sind sichtbar."],
+      ["Beobachtung", "Du nennst die stärksten Rückgänge mit Monaten und Eurobeträgen. Deine Frage benennt die Daten, die helfen würden, einen Rückgang zu erklären."]
+    ] }
   ],
   [11,
     "Kunden, Aufträge und Artikel mit Schlüsseln modellieren.",
@@ -203,6 +208,19 @@ export const extensions = {
         "Vergleiche beide Anzeigen für P-2703. Begründe, welche Regel auch bei erreichter Sollmenge eine Auffälligkeit meldet."
       ],
       result: "Zwei Formeln, ein Grenztest und eine Erklärung für die unterschiedlichen Meldungen."
+    }
+  ],
+  10: [
+    {
+      minutes: 10,
+      title: "Linie und Säulen für zwei Fragestellungen vergleichen",
+      data: "Verwende dieselben Monatswerte aus A7:B13. Die Geschäftsleitung fragt einmal nach dem Verlauf und einmal nach dem umsatzstärksten Monat.",
+      steps: [
+        "Füge zusätzlich zum Liniendiagramm ein Säulendiagramm mit denselben sechs Monaten ein. Die Wertachse der Säulen beginnt bei null.",
+        "Lies den stärksten Monat und die Rückgänge in beiden Grafiken ab. Gleiche die abgelesenen Werte mit der Tabelle ab.",
+        "Wähle für jede Frage eine Darstellung und begründe, welche Form das Ablesen erleichtert."
+      ],
+      result: "Zwei Darstellungen derselben Daten und eine begründete Wahl für jede Fragestellung."
     }
   ],
   15: [
