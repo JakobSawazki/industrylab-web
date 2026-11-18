@@ -295,9 +295,11 @@ function showLesson(lesson) {
   const photo = find("lesson-photo");
   photo.alt = lesson.imageAlt;
   photo.src = "./kapitelbilder/" + lessonImageName(lesson.id);
-  find("lesson-files").replaceChildren(lesson.files.length
-    ? downloadLinks(lesson)
-    : []);
+  if (lesson.files.length) {
+    const files = find("lesson-files");
+    files.append(downloadLinks(lesson));
+    files.hidden = false;
+  }
 
   const excel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 15, 17].includes(lesson.id);
   const workspace = find("lesson-workspace");
@@ -415,7 +417,9 @@ const downloads = find("downloads");
 if (downloads) {
   for (const lesson of lessons.filter(lesson => lesson.files.length)) {
     const row = element("li");
-    row.append(element("strong", lesson.title), downloadLinks(lesson));
+    const unit = element("a", "Einheit " + lesson.id + " · " + lesson.title, "material-unit");
+    unit.href = lessonHref(lesson.id);
+    row.append(unit, downloadLinks(lesson));
     downloads.append(row);
   }
 }
@@ -516,11 +520,13 @@ find("backup-file").addEventListener("change", async event => {
   }
 });
 
-function openLinkedProfile() {
+function followHash() {
+  if (continueLink && location.hash === "#material") location.replace("./downloads.html");
+  if (continueLink && location.hash === "#lernfelder") location.replace("./lernpfad.html");
   if (location.hash === "#fortschritt") openProfile();
 }
 
-window.addEventListener("hashchange", openLinkedProfile);
+window.addEventListener("hashchange", followHash);
 window.addEventListener("pageshow", event => {
   if (!event.persisted) return;
   restoreResponseFields();
@@ -535,8 +541,7 @@ window.addEventListener("pageshow", event => {
 });
 
 refresh();
-if (continueLink && location.hash === "#lernfelder") location.replace("./lernpfad.html");
-openLinkedProfile();
+followHash();
 if (lessonPage) {
   const lesson = lessonById.get(Number(route.get("nr")));
   if (lesson) showLesson(lesson);
