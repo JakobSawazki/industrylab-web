@@ -464,29 +464,44 @@ if (downloads) {
 
 const profileDialog = find("profile");
 const profileFields = { studentCode: find("student-code"), className: find("class-name") };
+let pendingProfile = false;
 
-try {
-  const stored = localStorage.getItem(profileStorageKey);
-  if (stored) profile = readProfile(JSON.parse(stored));
-} catch {
-  find("profile-status").textContent = "Das gespeicherte Profil konnte nicht geladen werden.";
-}
-
-function saveProfile(nextProfile) {
+function applyProfile(nextProfile) {
   for (const [key, field] of Object.entries(profileFields)) {
     if (field.value === profile[key]) field.value = nextProfile[key];
   }
   profile = nextProfile;
+}
+
+function syncProfile() {
+  if (pendingProfile) return;
+  try {
+    const stored = localStorage.getItem(profileStorageKey);
+    applyProfile(readProfile(stored ? JSON.parse(stored) : undefined));
+  } catch {
+    find("profile-status").textContent = "Das gespeicherte Profil konnte nicht geladen werden.";
+  }
+}
+
+syncProfile();
+window.addEventListener("storage", event => {
+  if (event.key === null || event.key === profileStorageKey) syncProfile();
+});
+
+function saveProfile(nextProfile) {
+  applyProfile(nextProfile);
   try {
     localStorage.setItem(profileStorageKey, JSON.stringify(profile));
-    return true;
+    pendingProfile = false;
   } catch {
-    return false;
+    pendingProfile = true;
   }
+  return !pendingProfile;
 }
 
 function openProfile() {
   if (profileDialog.open) return;
+  syncProfile();
   for (const [key, field] of Object.entries(profileFields)) field.value = profile[key];
   profileDialog.showModal();
 }
@@ -505,6 +520,7 @@ find("profile-form").addEventListener("submit", event => {
 });
 
 function exportBackup() {
+  syncProfile();
   const responses = Object.fromEntries(responseIds.map(id => [id, responseValue(id)]));
   const data = JSON.stringify(backupFor(completed, profile, responses), null, 2);
   const url = URL.createObjectURL(new Blob([data], { type: "application/json" }));
@@ -534,6 +550,7 @@ find("backup-file").addEventListener("change", async event => {
     const entries = readBackup(payload);
     const imported = readProfile(payload.profile);
     const responses = readResponses(payload.responses);
+    syncProfile();
     const nextProfile = {
       studentCode: profile.studentCode || imported.studentCode,
       className: profile.className || imported.className
@@ -568,10 +585,9 @@ window.addEventListener("hashchange", followHash);
 window.addEventListener("pageshow", event => {
   if (!event.persisted) return;
   restoreResponseFields();
+  syncProfile();
   try {
     completed = mergeProgress(completed, savedProgress());
-    const stored = localStorage.getItem(profileStorageKey);
-    if (stored) profile = readProfile(JSON.parse(stored));
     refresh();
   } catch {
     find("backup-status").textContent = "Der Browser konnte den gespeicherten Stand nicht aktualisieren.";
