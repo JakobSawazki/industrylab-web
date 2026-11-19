@@ -52,11 +52,13 @@ if (learningNav) {
   learningNav.addEventListener("toggle", updateNavigationLayout);
 
   const initialSection = location.hash;
-  if (lessonPage && ["#lesson-plan", "#lesson-responses", "#quiz"].includes(initialSection)) {
+  if (lessonPage && ["#lesson-files", "#lesson-plan", "#lesson-responses", "#quiz"].includes(initialSection)) {
     window.addEventListener("load", () => requestAnimationFrame(() => {
       if (location.hash !== initialSection || lessonPage.hidden) return;
+      const section = find(initialSection.slice(1));
+      if (section.hidden) return;
       updateNavigationLayout();
-      find(initialSection.slice(1)).scrollIntoView();
+      section.scrollIntoView();
     }), { once: true });
   }
 
@@ -342,6 +344,7 @@ function showLesson(lesson) {
     const files = find("lesson-files");
     files.append(downloadLinks(lesson));
     files.hidden = false;
+    find("lesson-files-jump").hidden = false;
   }
 
   const excel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 15, 17].includes(lesson.id);
