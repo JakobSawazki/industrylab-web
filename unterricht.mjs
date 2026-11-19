@@ -159,7 +159,7 @@ const plans = [
     "Eine verdächtige Nachricht prüfen und eine Auswertung datensparsam erstellen.",
     "Fiktive Meldung: „Neues Versandportal. Melden Sie sich binnen 15 Minuten über den Link an.“ Für Mengen je Region liegen Name, E-Mail, Region und Versandmenge vor.",
     ["Markiere zwei Warnsignale und nenne einen unabhängigen Weg, die Nachricht zu prüfen.",
-      "Wähle die erforderlichen Spalten aus. Erkläre, welche aggregierten Angaben weitergegeben werden können.",
+      "Wähle in der Browserübung die erforderlichen Spalten aus. Erkläre anhand des Beispielberichts, welche zusammengefassten Angaben die Logistikleitung für diesen Auftrag braucht.",
       "Formuliere einen kurzen internen Meldehinweis. Verwende keine Zugangsdaten und öffne keinen Link."],
     "Begründete Prüfschritte und zwei ausgewählte Spalten.",
     "Verwende einen bekannten Kontaktweg. Region und Versandmenge reichen für die Auswertung."

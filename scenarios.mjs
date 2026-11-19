@@ -688,6 +688,57 @@ function deliveriesLab(data) {
   return panel;
 }
 
+function shipmentReportLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Versandbericht datensparsam erstellen";
+  const intro = document.createElement("p");
+  intro.textContent = "Die Logistikleitung braucht nur die Gesamtzahl versandter Stück je Region. Wähle die Felder, die du für diesen Bericht brauchst.";
+  const form = document.createElement("form");
+  const choices = document.createElement("fieldset");
+  const legend = document.createElement("legend");
+  legend.textContent = "Felder im Beispiel-Export";
+  choices.append(legend);
+  const labels = [["Name", false], ["E-Mail", false], ["Region", true], ["Versandmenge", true]];
+  const fields = labels.map(([title, needed]) => {
+    const label = document.createElement("label");
+    label.className = "answer";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    label.append(input, document.createTextNode(title));
+    choices.append(label);
+    return { title, needed, input };
+  });
+  const check = document.createElement("button");
+  check.type = "submit";
+  check.textContent = "Feldauswahl prüfen";
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  const result = document.createElement("div");
+  form.addEventListener("input", () => {
+    status.textContent = "";
+    result.replaceChildren();
+  });
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const missing = fields.filter(({ input, needed }) => needed && !input.checked).map(field => field.title);
+    const extra = fields.filter(({ input, needed }) => !needed && input.checked).map(field => field.title);
+    const feedback = [];
+    if (missing.length) feedback.push("Für die Summe je Region fehlen noch Felder: " + missing.join(", ") + ".");
+    if (extra.length) feedback.push("Entferne die für diesen Bericht überflüssigen Felder: " + extra.join(", ") + ".");
+    if (feedback.length) {
+      status.textContent = feedback.join(" ");
+      return;
+    }
+    status.textContent = "Die Auswahl passt. Im fertigen Bericht steht pro Region nur die Summe der Versandmengen.";
+    result.replaceChildren(scenarioTable("Beispielbericht", ["Region", "Versandmenge (Stück)"], [["Nord", 40], ["Süd", 25]]));
+  });
+  form.append(choices, check, status, result);
+  panel.append(summary, intro, form);
+  return panel;
+}
+
 export function scenarioPanel(id, data) {
   if (id === 1) return planningReserveLab();
   if (id === 3) return lookupLab();
@@ -696,6 +747,7 @@ export function scenarioPanel(id, data) {
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
   if (id === 14) return deliveriesLab(data);
+  if (id === 16) return shipmentReportLab();
   const panel = document.createElement("details");
   const scenario = scenarios[id];
   if (!scenario) {
