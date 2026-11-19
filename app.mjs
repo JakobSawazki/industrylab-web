@@ -1,5 +1,5 @@
 import { lessonImageName, lessons, pointsPerLesson } from "./lessons.mjs";
-import { backupFor, mergeProgress, profileStorageKey, readBackup, readProfile, readResponses, responseIds, responseLimit, responsePrefix, storageKey, totalPoints } from "./progress.mjs";
+import { backupFor, completionPrefix, mergeProgress, profileStorageKey, readBackup, readProfile, readResponses, readStoredProgress, responseIds, responseLimit, responsePrefix, storageKey, totalPoints, writeStoredProgress } from "./progress.mjs";
 
 import { extensions, phases, responseFields, units } from "./unterricht.mjs";
 import { scenarioPanel } from "./scenarios.mjs";
@@ -56,13 +56,14 @@ if (learningNav) {
   });
 }
 
-function savedProgress() {
-  const raw = localStorage.getItem(storageKey);
-  return raw ? readBackup(JSON.parse(raw)) : [];
+function syncProgress() {
+  const stored = readStoredProgress(localStorage);
+  completed = mergeProgress(completed, stored.completed);
+  if (stored.damaged) find("backup-status").textContent = "Ein Teil des gespeicherten Lernstands konnte nicht gelesen werden.";
 }
 
 try {
-  completed = savedProgress();
+  syncProgress();
 } catch {
   find("backup-status").textContent = "Der gespeicherte Lernstand konnte nicht geladen werden. Du kannst eine Sicherung laden.";
 }
@@ -70,12 +71,8 @@ try {
 function saveProgress(entries) {
   completed = mergeProgress(completed, entries);
   try {
-    completed = mergeProgress(completed, savedProgress());
-  } catch {
-    // A valid new backup can replace a damaged local record.
-  }
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(backupFor(completed)));
+    syncProgress();
+    writeStoredProgress(localStorage, completed);
     return true;
   } catch {
     return false;
@@ -83,9 +80,9 @@ function saveProgress(entries) {
 }
 
 window.addEventListener("storage", event => {
-  if (event.key !== storageKey || !event.newValue) return;
+  if (!event.newValue || (event.key !== storageKey && !event.key?.startsWith(completionPrefix))) return;
   try {
-    completed = mergeProgress(completed, readBackup(JSON.parse(event.newValue)));
+    syncProgress();
     refresh();
   } catch {
     find("backup-status").textContent = "Eine Änderung aus einem anderen Tab konnte nicht geladen werden.";
@@ -521,6 +518,11 @@ find("profile-form").addEventListener("submit", event => {
 
 function exportBackup() {
   syncProfile();
+  try {
+    syncProgress();
+  } catch {
+    // The in-memory progress remains exportable when storage is unavailable.
+  }
   const responses = Object.fromEntries(responseIds.map(id => [id, responseValue(id)]));
   const data = JSON.stringify(backupFor(completed, profile, responses), null, 2);
   const url = URL.createObjectURL(new Blob([data], { type: "application/json" }));
@@ -587,7 +589,7 @@ window.addEventListener("pageshow", event => {
   restoreResponseFields();
   syncProfile();
   try {
-    completed = mergeProgress(completed, savedProgress());
+    syncProgress();
     refresh();
   } catch {
     find("backup-status").textContent = "Der Browser konnte den gespeicherten Stand nicht aktualisieren.";
