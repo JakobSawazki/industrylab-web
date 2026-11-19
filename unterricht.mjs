@@ -54,9 +54,9 @@ const plans = [
     "A: 2.000 € fix + 6 € je Stück. B: 800 € fix + 9 € je Stück. Vergleiche 200 und 500 Stück.",
     ["Öffne die Excel-Ausgangsdatei mit vier Zeilen für die beiden Varianten und Mengen.",
       "Berechne Gesamt- und Stückkosten mit Zellbezügen.",
-      "Empfiehl für jede Menge eine Variante und belege sie mit dem Preisunterschied."],
+      "Empfiehl für jede Menge eine Variante und belege sie mit dem Kostenunterschied. Prüfe im Browser, bei welcher Menge die Gesamtkosten gleich sind."],
     "Vier berechnete Zeilen, zwei Empfehlungen mit Zahlen.",
-    "Gesamtkosten = Fixkosten + Stückzahl × variable Stückkosten. Teile anschließend durch die Menge."
+    "Gesamtkosten = Fixkosten + Stückzahl × variable Stückkosten. Bei einer positiven Menge teilst du anschließend durch die Stückzahl."
   ],
   [7,
     "Gewinnschwelle berechnen und grafisch erklären.",

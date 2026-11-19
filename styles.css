@@ -454,7 +454,8 @@ legend { font-weight: 750; }
 .scenario table { border-collapse: collapse; width: 100%; text-align: start; }
 .scenario caption { text-align: start; font-weight: 750; margin-block: .4rem; }
 .scenario th, .scenario td { border-block-end: 1px solid var(--line); padding: .35rem .5rem; text-align: start; }
-.lookup-lab table { font-size: .9rem; overflow-wrap: anywhere; }
+:is(.lookup-lab, .cost-lab) table { font-size: .9rem; overflow-wrap: anywhere; }
+.cost-lab td { padding-inline: .35rem; }
 .lookup-lab .lookup-match { background: var(--selected); color: var(--link); font-weight: 750; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 

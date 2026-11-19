@@ -334,6 +334,68 @@ function pivotLab() {
   return panel;
 }
 
+const costModels = [["A", 2000, 6], ["B", 800, 9]];
+
+export function costVariants(units) {
+  return costModels.map(([name, fixed, rate]) => {
+    const variable = units * rate;
+    const total = fixed + variable;
+    return { name, fixed, variable, total, perUnit: units ? total / units : null };
+  });
+}
+
+function costLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario cost-lab";
+  const summary = document.createElement("summary");
+  summary.textContent = "Stückkosten bei anderen Mengen prüfen";
+  const intro = document.createElement("p");
+  intro.textContent = "Vergleiche nach der Excel-Rechnung 200 und 500 Stück. Finde die Menge, bei der beide Varianten gleich viel kosten. Teste auch 0 Stück.";
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const label = document.createElement("label");
+  label.textContent = "Produktionsmenge in Stück";
+  const amount = document.createElement("input");
+  amount.type = "number";
+  amount.value = "200";
+  amount.min = "0";
+  amount.max = "1000000";
+  amount.step = "1";
+  amount.required = true;
+  label.append(amount);
+  fields.append(label);
+  const output = document.createElement("div");
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  function update() {
+    if (!amount.validity.valid) {
+      output.replaceChildren();
+      status.textContent = "Gib eine ganze Menge zwischen 0 und 1.000.000 Stück ein.";
+      return;
+    }
+    const units = amount.valueAsNumber;
+    const variants = costVariants(units);
+    const rows = [
+      ["Fixkosten", "fixed"], ["Variable Kosten gesamt", "variable"], ["Gesamtkosten", "total"], ["Kosten je Stück", "perUnit"]
+    ].map(([title, key]) => [title, ...variants.map(variant => variant[key] === null ? "–" : euros.format(variant[key]))]);
+    output.replaceChildren(scenarioTable("Kosten bei " + number.format(units) + " Stück", ["Kostenart", "Variante A", "Variante B"], rows));
+    const [first, second] = variants;
+    const difference = first.total - second.total;
+    if (units === 0) {
+      status.textContent = "Bei 0 Stück fallen die Fixkosten an. Kosten je Stück lassen sich erst ab 1 Stück berechnen.";
+    } else if (difference === 0) {
+      status.textContent = "Beide Varianten kosten bei dieser Menge gleich viel.";
+    } else {
+      const cheaper = difference > 0 ? second : first;
+      status.textContent = "Variante " + cheaper.name + " kostet " + euros.format(Math.abs(difference)) + " weniger.";
+    }
+  }
+  amount.addEventListener("input", update);
+  update();
+  panel.append(summary, intro, fields, output, status);
+  return panel;
+}
+
 function lookupLab() {
   const panel = document.createElement("details");
   panel.className = "scenario lookup-lab";
@@ -571,6 +633,7 @@ function deliveriesLab(data) {
 export function scenarioPanel(id, data) {
   if (id === 3) return lookupLab();
   if (id === 5) return pivotLab();
+  if (id === 6) return costLab();
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
   if (id === 14) return deliveriesLab(data);
