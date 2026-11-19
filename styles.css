@@ -16,6 +16,7 @@
   --metal-wash: #d1e4f2c4;
   --metal-shade: #224b742c;
   --metal-sheen: #ebf6fd65;
+  --header-metal-tint: 78%;
   --edge: #a85312;
   --link: #824008;
   --accent: #ffc47c;
@@ -41,6 +42,7 @@
   --metal-wash: #0d25465c;
   --metal-shade: #030e1ebf;
   --metal-sheen: #29578121;
+  --header-metal-tint: 52%;
   --edge: #ffb565;
   --link: #ffbf78;
   --quiet-face: linear-gradient(160deg, #203d58, #122b42);
@@ -76,8 +78,15 @@ button, .button { cursor: pointer; }
   inset-block-start: 0;
   z-index: 5;
   background: linear-gradient(180deg, var(--surface), var(--inset));
+  background-image:
+    linear-gradient(108deg, transparent 15%, var(--metal-sheen) 48%, transparent 78%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) var(--header-metal-tint), transparent),
+      color-mix(in srgb, var(--inset) var(--header-metal-tint), transparent)),
+    url("./brushed-blue-steel.jpg");
+  background-size: auto, auto, 1120px auto;
+  background-position: center;
   border-bottom: 1px solid var(--line);
-  box-shadow: 0 4px 16px var(--shadow);
+  box-shadow: inset 0 1px var(--bevel), 0 4px 16px var(--shadow);
 }
 .bar {
   width: 100%;
@@ -511,6 +520,7 @@ legend { font-weight: 750; }
   .points { height: 36px; }
 }
 @media (forced-colors: active) {
+  .top { background: Canvas; }
   :is(.top nav > a, .top nav > .nav-action, .learning-nav > summary) { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
   .learning-nav[open] > summary { border-color: Highlight; }
   .sliders-icon { color: ButtonText; forced-color-adjust: none; }
