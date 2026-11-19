@@ -9,7 +9,7 @@ const plans = [
     "Planungsreserve: 8 %.\nAuftrag | Menge | Minuten je Stück\nP-2601 | 120 | 6,5\nP-2602 | 80 | 8,0\nP-2603 | 150 | 6,5",
     ["Öffne die Excel-Ausgangsdatei. Die drei Aufträge und die Planungsreserve von 8 % stehen bereits darin.",
       "Berechne Produktionszeit in Stunden und Planzeit mit Reserve. Kopiere beide Formeln nach unten.",
-      "Ändere die Reserve auf 12 % und erkläre, warum sich alle Planzeiten ändern."],
+      "Ändere die Reserve auf 12 % und erkläre, warum sich alle Planzeiten ändern. Wenn nur die erste Zeile reagiert, vergleiche die kopierten Zellbezüge mit der Browserübung."],
     "Drei berechnete Aufträge mit Produktionszeit und Planzeit für beide Reserven.",
     "Teile die Gesamtminuten durch 60. Fixiere die Reservezelle mit Dollarzeichen."
   ],

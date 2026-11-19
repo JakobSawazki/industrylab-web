@@ -287,6 +287,43 @@ function comparisonField(parent, caption, entries) {
   return select;
 }
 
+function planningReserveLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Formeln beim Kopieren vergleichen";
+  const intro = document.createElement("p");
+  intro.textContent = "Die Formel aus E8 wird nach E9 und E10 kopiert. Sage zuerst voraus, welche Zelle die zweite Formel für die Reserve liest. Wechsle dann zwischen B4 und $B$4.";
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const reference = comparisonField(fields, "Bezug in der ersten Formel", [["relative", "B4 · relativ"], ["absolute", "$B$4 · absolut"]]);
+  const reserve = comparisonField(fields, "Planungsreserve in B4", [["8", "8 %"], ["12", "12 %"]]);
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  const result = document.createElement("div");
+  const orders = [[120, 6.5], [80, 8], [150, 6.5]];
+
+  function update() {
+    const fixed = reference.value === "absolute";
+    const percentage = Number(reserve.value) / 100;
+    const rows = orders.map(([quantity, minutes], index) => {
+      const row = index + 8;
+      const address = fixed ? "$B$4" : "B" + (index + 4);
+      const appliedReserve = fixed || index === 0 ? percentage : 0;
+      const hours = quantity * minutes / 60 * (1 + appliedReserve);
+      return ["E" + row, "=D" + row + "*(1+" + address + ")", number.format(hours) + " h"];
+    });
+    result.replaceChildren(scenarioTable("Planzeit in der Excel-Vorlage", ["Zelle", "Formel", "Ergebnis"], rows));
+    status.textContent = fixed
+      ? "Alle drei Formeln lesen die Reserve aus B4. Der Bezug zur Produktionszeit folgt weiterhin der Auftragszeile."
+      : "Nur E8 liest die Reserve aus B4. In der Vorlage sind B5 und B6 leer. Excel rechnet dort mit 0 % Reserve.";
+  }
+  fields.addEventListener("change", update);
+  update();
+  panel.append(summary, intro, fields, status, result);
+  return panel;
+}
+
 // From the published pivot workbook, based on quantity × unit price for rows 5–184.
 const regionalOrders = [
   { region: "Nord", count: 46, revenue: 112349 },
@@ -638,6 +675,7 @@ function deliveriesLab(data) {
 }
 
 export function scenarioPanel(id, data) {
+  if (id === 1) return planningReserveLab();
   if (id === 3) return lookupLab();
   if (id === 5) return pivotLab();
   if (id === 6) return costLab();
