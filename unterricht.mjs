@@ -72,7 +72,7 @@ const plans = [
     "Eigen: 1.500 € fix + 5 €/Stück, 4 Tage. Fremd: 8 €/Stück, 7 Tage. Mengen: 300, 500 und 600. Lieferfrist: 5 Tage.",
     ["Öffne die Excel-Ausgangsdatei. Berechne beide Gesamtkosten je Menge und markiere den Gleichstand.",
       "Ermittle die günstigste Variante für 300 Stück.",
-      "Empfiehl eine Variante für 300 Stück unter Einhaltung des Termins. Begründe den Unterschied zur reinen Kostenentscheidung."],
+      "Empfiehl eine Variante für 300 Stück bei fünf Tagen Lieferfrist. Teste im Browser anschließend sieben Tage und erkläre, warum sich die Empfehlung ändert."],
     "Kostenvergleich und terminbezogene Empfehlung.",
     "Prüfe die Lieferzeit getrennt von den Kosten."
   ],

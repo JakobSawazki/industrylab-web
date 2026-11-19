@@ -16,6 +16,21 @@ export function breakEven(fixed, variable, price, units) {
   };
 }
 
+const makeDays = 4;
+const buyDays = 7;
+
+export function makeOrBuy(units, deadline) {
+  const makeCost = 1500 + 5 * units;
+  const buyCost = 8 * units;
+  let cheapest = "tie";
+  if (makeCost < buyCost) cheapest = "make";
+  if (buyCost < makeCost) cheapest = "buy";
+  let recommendation = cheapest;
+  if (deadline < buyDays) recommendation = "make";
+  if (deadline < makeDays) recommendation = "none";
+  return { makeCost, buyCost, cheapest, recommendation };
+}
+
 export function campaignMetrics(clicks, orders, spend, revenue) {
   if (orders > clicks) return "Die Zahl der Bestellungen darf in diesem Beispiel die Klickzahl nicht überschreiten.";
   const conversion = clicks ? number.format(100 * orders / clicks) + " %" : "–";
@@ -61,6 +76,26 @@ const scenarios = {
       const { cost, sales, profit, minimum } = breakEven(fixed, variable, price, units);
       return "Erlös " + euros.format(sales) + " · Kosten " + euros.format(cost) + " · Ergebnis " + euros.format(profit)
         + (minimum === null ? " · Keine Gewinnschwelle bei diesem Preis." : " · Kostendeckung ab " + number.format(minimum) + " Stück.");
+    }
+  },
+  8: {
+    title: "Kosten und Lieferfrist vergleichen",
+    fields: [["Auftragsmenge in Stück", 300, 1, 1], ["Lieferfrist in Tagen", 5, 0, 1]],
+    note: "Im Modell bleiben die Lieferzeiten bei jeder Menge gleich. Prüfe zuerst die Frist von 5 Tagen und erhöhe sie dann auf 7 Tage.",
+    calculate(units, deadline) {
+      const { makeCost, buyCost, cheapest, recommendation } = makeOrBuy(units, deadline);
+      const labels = { make: "Eigenfertigung", buy: "Fremdbezug" };
+      const cost = cheapest === "tie"
+        ? "Beide Varianten kosten gleich viel."
+        : labels[cheapest] + " ist um " + euros.format(Math.abs(makeCost - buyCost)) + " günstiger.";
+      const eligible = {
+        none: "Keine Variante hält die Frist ein.",
+        tie: "Beide Varianten halten die Frist ein und kosten gleich viel.",
+        make: "Eigenfertigung ist die passende Variante innerhalb der Frist.",
+        buy: "Fremdbezug ist die passende Variante innerhalb der Frist."
+      };
+      return "Eigenfertigung " + euros.format(makeCost) + " (" + makeDays + " Tage) · Fremdbezug "
+        + euros.format(buyCost) + " (" + buyDays + " Tage). " + cost + " " + eligible[recommendation];
     }
   },
   9: {

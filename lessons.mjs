@@ -74,7 +74,7 @@ export const lessons = [
     imageAlt: "Zwei vergleichbare Werkstücke, eines davon in einer Lieferverpackung",
     fields: [8],
     title: "Entscheidungen mit Daten vorbereiten",
-    brief: "Vergleiche Eigenfertigung und Fremdbezug bei verschiedenen Mengen. Ergänze die Kostenrechnung um Lieferzeit und Qualität.",
+    brief: "Vergleiche Eigenfertigung und Fremdbezug bei verschiedenen Mengen. Empfiehl eine Variante, die zum Liefertermin passt.",
     check: {"prompt":"Eigenfertigung kostet 1.500 € fix und 5 € je Stück. Fremdbezug kostet 8 € je Stück. Welche Variante ist bei 600 Stück günstiger?","choices":["Eigenfertigung um 300 €","Fremdbezug um 300 €","Beide kosten gleich viel"],"correct":0,"feedback":"Eigenfertigung kostet 4.500 €, Fremdbezug 4.800 €."},
     transfer: {"prompt":"Für einen Auftrag über 300 Stück ist die Frist fünf Tage. Eigenfertigung kostet 3.000 € und dauert vier Tage. Fremdbezug kostet 2.400 € und dauert sieben Tage. Welche Variante hält die Frist ein?","choices":["Eigenfertigung","Fremdbezug","Beide Varianten"],"correct":0,"feedback":"Nur die Eigenfertigung bleibt mit vier Tagen innerhalb der Fünf-Tage-Frist."},
     files: [{"name":"IndustryLab-08-Eigenfertigung-Fremdbezug-Ausgangsdaten.xlsx","label":"Excel-Ausgangsdaten"}],
