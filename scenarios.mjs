@@ -688,6 +688,50 @@ function deliveriesLab(data) {
   return panel;
 }
 
+function deliveryPlanLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Lieferplan für O201 prüfen";
+  const intro = document.createElement("p");
+  intro.textContent = "Trage nach der Störungsmeldung ein, welche Ankunft beim Kunden für die beiden Mengen bestätigt ist.";
+  const form = document.createElement("form");
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const options = [["", "Termin wählen"], ["friday", "Freitag"], ["monday", "Montag"], ["open", "Offen"]];
+  const first = comparisonField(fields, "Liefertermin für 30 Stück", options);
+  const rest = comparisonField(fields, "Liefertermin für 10 Stück", options);
+  first.required = true;
+  rest.required = true;
+  const check = document.createElement("button");
+  check.type = "submit";
+  check.textContent = "Lieferplan prüfen";
+  const feedback = document.createElement("p");
+  feedback.setAttribute("role", "status");
+  const result = document.createElement("div");
+  form.addEventListener("change", () => {
+    feedback.textContent = "";
+    result.replaceChildren();
+  });
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const remarks = [];
+    if (first.value !== "friday") remarks.push("Prüfe, welchen Termin der Kunde für die Teilmenge von 30 Stück bestätigt hat.");
+    if (rest.value === "monday") remarks.push("Montag ist die voraussichtliche Fertigstellung. Der Vertrieb hat die Ankunft der Restmenge noch nicht bestätigt.");
+    if (rest.value === "friday") remarks.push("Der Freitag gilt für die Teilmenge. Die Ankunft der restlichen 10 Stück ist noch offen.");
+    if (remarks.length) {
+      feedback.textContent = remarks.join(" ");
+      return;
+    }
+    feedback.textContent = "Der Lieferplan stimmt. Der Termin für die Restmenge wird ergänzt, sobald er bestätigt ist.";
+    result.replaceChildren(scenarioTable("Lieferplan nach der Störungsmeldung", ["Menge", "Ankunft beim Kunden"],
+      [["30 Stück", "Freitag · bestätigt"], ["10 Stück", "Offen"]]));
+  });
+  form.append(fields, check, feedback, result);
+  panel.append(summary, intro, form);
+  return panel;
+}
+
 function shipmentReportLab() {
   const panel = document.createElement("details");
   panel.className = "scenario";
@@ -746,6 +790,7 @@ export function scenarioPanel(id, data) {
   if (id === 6) return costLab();
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
+  if (id === 13) return deliveryPlanLab();
   if (id === 14) return deliveriesLab(data);
   if (id === 16) return shipmentReportLab();
   const panel = document.createElement("details");

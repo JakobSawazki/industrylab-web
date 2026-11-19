@@ -122,7 +122,7 @@ const plans = [
     "Der Kunde möchte 40 Baugruppen am Freitag erhalten. Für Auftrag O201 liegen 30 Stück im Lager. Die restlichen 10 sollen gefertigt werden.",
     ["Lies die Fallakte. Skizziere die fünf Übergaben vom Vertrieb bis zur Buchhaltung.",
       "Notiere je Übergabe einen Beleg oder Datensatz und zwei benötigte Felder. Markiere, wo Ware bewegt wird.",
-      "Öffne die Störungsmeldung. Erkläre, wer informiert werden muss und was im ERP zum Lieferplan steht."],
+      "Öffne die Störungsmeldung. Prüfe den Lieferplan im Browser und erkläre, wer informiert werden muss und warum der Montag noch kein bestätigter Liefertermin ist."],
     "Prozessskizze und begründeter Vorschlag für den Umgang mit der Verzögerung.",
     "Trenne die geplante Fertigstellung, den Versand und die Ankunft beim Kunden. Für jede Station kann im ERP ein eigener Termin stehen.",
     { caseFile: {
