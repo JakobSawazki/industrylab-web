@@ -30,6 +30,7 @@ const learningNav = find("learning-nav");
 if (learningNav) {
   const summary = learningNav.querySelector("summary");
   const header = learningNav.closest(".top");
+  const panel = learningNav.querySelector(".learning-nav-panel");
   const currentLesson = lessonPage ? Number(route.get("nr")) : null;
   const items = lessons.map(lesson => {
     const item = element("li");
@@ -45,11 +46,23 @@ if (learningNav) {
 
   function updateNavigationLayout() {
     document.documentElement.style.setProperty("--header-block-size", header.getBoundingClientRect().height + "px");
-    learningNav.style.setProperty("--learning-menu-anchor", summary.getBoundingClientRect().bottom + "px");
+    if (!learningNav.open) return;
+    const { left, bottom } = learningNav.getBoundingClientRect();
+    const rightmost = document.documentElement.clientWidth - panel.offsetWidth - 10;
+    learningNav.style.setProperty("--learning-menu-offset", Math.max(10, Math.min(left, rightmost)) - left + "px");
+    learningNav.style.setProperty("--learning-menu-anchor", bottom + "px");
   }
   updateNavigationLayout();
   new ResizeObserver(updateNavigationLayout).observe(header);
   learningNav.addEventListener("toggle", updateNavigationLayout);
+  learningNav.addEventListener("pointerenter", event => {
+    if (event.pointerType !== "mouse") return;
+    learningNav.open = true;
+    updateNavigationLayout();
+  });
+  learningNav.addEventListener("pointerleave", event => {
+    if (event.pointerType === "mouse" && !panel.contains(document.activeElement)) learningNav.open = false;
+  });
 
   const initialSection = location.hash;
   if (lessonPage && ["#lesson-files", "#lesson-plan", "#lesson-responses", "#quiz"].includes(initialSection)) {
@@ -68,11 +81,11 @@ if (learningNav) {
   learningNav.addEventListener("focusout", event => {
     if (event.relatedTarget && !learningNav.contains(event.relatedTarget)) learningNav.open = false;
   });
-  learningNav.addEventListener("keydown", event => {
+  document.addEventListener("keydown", event => {
     if (!learningNav.open || event.key !== "Escape") return;
     event.preventDefault();
     learningNav.open = false;
-    summary.focus();
+    if (learningNav.contains(document.activeElement)) summary.focus();
   });
 }
 

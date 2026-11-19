@@ -154,13 +154,13 @@ button, .button { cursor: pointer; }
 .learning-nav[open] summary::after { transform: translateY(.12em) rotate(225deg); }
 .learning-nav-panel {
   position: absolute;
-  inset-block-start: calc(100% + .7rem);
-  inset-inline-start: 0;
+  inset-block-start: 100%;
+  inset-inline-start: var(--learning-menu-offset, 0px);
   z-index: 1;
-  width: min(22rem, calc(100vw - 24px));
-  max-height: min(25rem, 60vh);
-  max-height: min(25rem, calc(100dvh - var(--learning-menu-anchor, 0px) - 1.2rem));
-  overflow: auto;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: 60vh;
+  max-height: max(3rem, calc(100dvh - var(--learning-menu-anchor, 0px) - .6rem));
+  overflow-y: auto;
   overscroll-behavior: contain;
   padding: .45rem;
   background: var(--surface);
@@ -168,12 +168,28 @@ button, .button { cursor: pointer; }
   border-radius: 10px;
   box-shadow: 0 12px 24px var(--shadow);
 }
-.learning-nav-panel ol { list-style: none; padding: 0; margin: .25rem 0 0; }
+.learning-nav-panel ol { list-style: none; padding: 0; margin: 0; }
 .top nav .learning-nav-panel a { display: flex; gap: .65rem; align-items: baseline; padding: .62rem .65rem; border-radius: 5px; color: var(--ink); }
 .top nav .learning-nav-panel a:hover, .top nav .learning-nav-panel a[aria-current="page"] { background: var(--selected); color: var(--link); }
 .learning-nav-panel a:focus-visible { outline-offset: -2px; }
-.top nav .learning-nav-overview { border-bottom: 1px solid var(--line); color: var(--link); }
 .learning-nav-number { flex: none; color: var(--link); font-variant-numeric: tabular-nums; }
+@media (min-width: 700px) {
+  .learning-nav-panel { width: min(45rem, calc(100vw - 2rem)); }
+  .learning-nav-panel ol {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(9, auto);
+    column-gap: .5rem;
+  }
+}
+@media (min-width: 1080px) and (max-height: 600px) {
+  .learning-nav-panel { width: min(65rem, calc(100vw - 2rem)); }
+  .learning-nav-panel ol {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(6, auto);
+  }
+}
 .header-tools { display: flex; align-items: center; gap: .55rem; }
 .points {
   --control-face: var(--quiet-face);
