@@ -31,14 +31,18 @@ export function makeOrBuy(units, deadline) {
   return { makeCost, buyCost, cheapest, recommendation };
 }
 
-export function campaignMetrics(clicks, orders, spend, revenue) {
+export function campaignMetrics(clicks, orders, spend, revenue, limit) {
   if (orders > clicks) return "Die Zahl der Bestellungen darf in diesem Beispiel die Klickzahl nicht überschreiten.";
   const conversion = clicks ? number.format(100 * orders / clicks) + " %" : "–";
   const costPerOrder = orders ? euros.format(spend / orders) : "–";
   const metrics = "Conversion Rate " + conversion + " · Kosten je Bestellung " + costPerOrder;
   if (revenue === undefined) return metrics;
   const revenuePerEuro = spend ? euros.format(revenue / spend) : "–";
-  return metrics + " · Umsatz je Werbe-Euro " + revenuePerEuro;
+  const withRevenue = metrics + " · Umsatz je Werbe-Euro " + revenuePerEuro;
+  if (limit === undefined) return withRevenue;
+  if (orders === 0) return withRevenue + " · Kostenziel ohne Bestellungen nicht bewertbar.";
+  const qualifies = Math.round(spend * 100) <= Math.round(limit * 100) * orders;
+  return withRevenue + (qualifies ? " · Kostenziel erreicht." : " · Kostenziel überschritten.");
 }
 
 export function stockProposal(opening, incoming, outgoing, minimum, target) {
@@ -102,7 +106,8 @@ const scenarios = {
     title: "Kampagnen vergleichen",
     fields: [["Klicks", 1200, 0, 1], ["Bestellungen", 36, 0, 1], ["Werbekosten in €", 540, 0, 0.01], ["Umsatz in €", 1800, 0, 0.01]],
     campaigns: [["Kampagne A", [1200, 36, 540, 1800]], ["Kampagne B", [800, 32, 640, 2240]]],
-    note: "Umsatz je Werbe-Euro zeigt das Verhältnis von Umsatz zu Werbekosten. Für eine Gewinnrechnung fehlen die übrigen Kosten.",
+    limit: 18,
+    note: "Für den Vergleich mit dem Kostenziel zählen die ungerundeten Werbekosten je Bestellung. Für eine Gewinnrechnung fehlen die übrigen Kosten.",
     calculate: campaignMetrics
   },
   15: {
@@ -186,7 +191,7 @@ function breakEvenChart() {
   return { figure, update };
 }
 
-function calculatorFields(scenario, values) {
+function calculatorFields(scenario, values, limitInput) {
   const calculator = document.createElement("div");
   const fields = document.createElement("div");
   fields.className = "scenario-fields";
@@ -208,8 +213,9 @@ function calculatorFields(scenario, values) {
     return input;
   });
   function update() {
-    const valid = inputs.every(input => input.validity.valid);
+    const valid = inputs.every(input => input.validity.valid) && (!limitInput || limitInput.validity.valid);
     const current = inputs.map(input => input.valueAsNumber);
+    if (limitInput) current.push(limitInput.valueAsNumber);
     result.textContent = valid ? scenario.calculate(...current) : "Prüfe die Eingaben.";
     if (chart) {
       chart.figure.hidden = !valid;
@@ -217,6 +223,7 @@ function calculatorFields(scenario, values) {
     }
   }
   fields.addEventListener("input", update);
+  limitInput?.addEventListener("input", update);
   update();
   calculator.append(fields, result);
   if (chart) calculator.append(chart.figure);
@@ -649,11 +656,25 @@ export function scenarioPanel(id, data) {
   summary.textContent = scenario.title;
   panel.append(summary);
   if (scenario.campaigns) {
+    const target = document.createElement("div");
+    target.className = "scenario-fields";
+    const label = document.createElement("label");
+    label.textContent = "Maximale Werbekosten je Bestellung in €";
+    const limitInput = document.createElement("input");
+    limitInput.type = "number";
+    limitInput.value = scenario.limit;
+    limitInput.min = 0;
+    limitInput.max = 1000000;
+    limitInput.step = 0.01;
+    limitInput.required = true;
+    label.append(limitInput);
+    target.append(label);
+    panel.append(target);
     for (const [name, values] of scenario.campaigns) {
       const group = document.createElement("fieldset");
       const legend = document.createElement("legend");
       legend.textContent = name;
-      group.append(legend, calculatorFields(scenario, values));
+      group.append(legend, calculatorFields(scenario, values, limitInput));
       panel.append(group);
     }
   } else {

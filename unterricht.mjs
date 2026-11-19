@@ -81,7 +81,7 @@ const plans = [
     "A: 1.200 Klicks, 36 Bestellungen, 540 € Werbekosten, 1.800 € Umsatz.\nB: 800 Klicks, 32 Bestellungen, 640 € Werbekosten, 2.240 € Umsatz.\nZiel: höchstens 18 € Werbekosten je Bestellung.",
     ["Berechne in der Excel-Ausgangsdatei für beide Kampagnen Conversion Rate, Werbekosten je Bestellung und Umsatz je Werbe-Euro.",
       "Vergleiche die beiden Zeilen mit dem Kennzahlenrechner. Ändere für eine Kampagne die Bestellzahl und beobachte die Auswirkungen.",
-      "Wähle eine Kampagne für das Kostenziel. Prüfe, ob du für das Ziel „möglichst viel Umsatz je Werbe-Euro“ dieselbe Kampagne wählen würdest."],
+      "Wähle eine Kampagne für das Kostenziel von 18 €. Prüfe mit den ursprünglichen Daten, was sich bei einer Grenze von 20 € ändert. Wähle anschließend für das Ziel „möglichst viel Umsatz je Werbe-Euro“."],
     "Zwei berechnete Kampagnen und eine Empfehlung mit Zahlen.",
     "Bestellungen durch Klicks als Prozentwert. Für den Umsatz je Werbe-Euro teile den Umsatz durch die Werbekosten. Bei einem Nenner von 0 bleibt die betreffende Kennzahl offen."
   ],
