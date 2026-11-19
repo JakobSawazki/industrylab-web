@@ -1,4 +1,4 @@
-import { dashboardSales } from "./unterricht.mjs";
+import { dashboardSales, projectSales } from "./unterricht.mjs";
 
 const euros = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
 const number = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 });
@@ -847,6 +847,48 @@ function shipmentReportLab() {
   return panel;
 }
 
+function projectRecommendationLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Empfehlung aus Excel abgleichen";
+  const intro = document.createElement("p");
+  intro.textContent = "Wähle nach deiner Excel-Auswertung den Schwerpunkt und die dazu passende Region. Vergleiche anschließend auch den anderen Schwerpunkt.";
+  const form = document.createElement("form");
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const goal = comparisonField(fields, "Schwerpunkt", [["volume", "Höherer Quartalsumsatz"], ["growth", "Stärkerer Zuwachs"]]);
+  const region = comparisonField(fields, "Empfohlene Region", [["", "Region wählen"], ["Nord", "Nord"], ["Süd", "Süd"]]);
+  region.required = true;
+  const check = document.createElement("button");
+  check.type = "submit";
+  check.textContent = "Empfehlung prüfen";
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  const result = document.createElement("div");
+  form.addEventListener("change", () => {
+    status.textContent = "";
+    result.replaceChildren();
+  });
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const volume = goal.value === "volume";
+    const values = [1, 2].map(column => volume
+      ? projectSales.reduce((sum, row) => sum + row[column], 0)
+      : projectSales.at(-1)[column] - projectSales[0][column]);
+    const recommended = values[0] > values[1] ? "Nord" : "Süd";
+    status.textContent = region.value === recommended
+      ? "Deine Empfehlung passt zum gewählten Schwerpunkt. Begründe sie mit beiden Werten."
+      : "Vergleiche die beiden Werte für diesen Schwerpunkt. " + recommended + " liegt hier vorn.";
+    const metric = volume ? "Quartalsumsatz (€)" : "Veränderung Juni gegenüber April (€)";
+    result.replaceChildren(scenarioTable("Vergleich nach Schwerpunkt", ["Region", metric],
+      [["Nord", number.format(values[0])], ["Süd", number.format(values[1])]]));
+  });
+  form.append(fields, check, status, result);
+  panel.append(summary, intro, form);
+  return panel;
+}
+
 export function scenarioPanel(id, data) {
   if (id === 1) return planningReserveLab();
   if (id === 3) return lookupLab();
@@ -858,6 +900,7 @@ export function scenarioPanel(id, data) {
   if (id === 13) return deliveryPlanLab();
   if (id === 14) return deliveriesLab(data);
   if (id === 16) return shipmentReportLab();
+  if (id === 17) return projectRecommendationLab();
   const panel = document.createElement("details");
   const scenario = scenarios[id];
   if (!scenario) {

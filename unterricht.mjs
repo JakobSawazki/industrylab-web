@@ -7,6 +7,10 @@ export const dashboardSales = [
   ["Apr", 15000], ["Mai", 16000], ["Jun", 13000]
 ];
 
+export const projectSales = [
+  ["April", 12000, 9000], ["Mai", 13000, 11000], ["Juni", 11000, 14000]
+];
+
 // IDs match lessons.mjs and remain stable when units are reordered.
 const plans = [
   [1,
@@ -171,12 +175,13 @@ const plans = [
   ],
   [17,
     "Die Geschäftsleitung der Nagold Components GmbH hat Zeit für eine vertiefte Analyse. Empfiehl, welche Region sie zuerst untersuchen sollte und zu welcher Frage.",
-    "Monat | Nord € | Süd €\nApril | 12.000 | 9.000\nMai | 13.000 | 11.000\nJuni | 11.000 | 14.000",
+    ["Monat | Nord € | Süd €", ...projectSales.map(([month, ...sales]) =>
+      [month, ...sales.map(amount => amount.toLocaleString("de-DE"))].join(" | "))].join("\n"),
     ["Berechne in Excel mit Formeln für beide Regionen den Quartalsumsatz und die Veränderung in Euro von April bis Juni.",
       "Erstelle aus den Monatswerten ein Liniendiagramm mit beiden Regionen. Gleiche die April- und Juniwerte im Diagramm mit der Tabelle ab.",
       "Wähle einen Schwerpunkt für die Analyse. Soll sie das größere Umsatzvolumen oder die stärkere Entwicklung untersuchen? Empfiehl eine Region mit zwei vergleichbaren Zahlen und nenne eine konkrete Frage für die weitere Analyse."],
     "Excel-Arbeitsmappe mit Kennzahlen und Diagramm. Empfehlung an die Geschäftsleitung in zwei bis drei Sätzen.",
-    "Quartalsumsatz und Entwicklung beantworten unterschiedliche Fragen. Prüfe, welche Kennzahl zu deiner Empfehlung passt und welche Daten die Geschäftsleitung als Nächstes bräuchte.",
+    "Quartalsumsatz und Entwicklung beantworten unterschiedliche Fragen. Gleiche nach der Excel-Auswertung deine Empfehlung mit der Browserübung ab. Halte fest, welche Daten die Geschäftsleitung als Nächstes bräuchte.",
     { criteria: [
       ["Kennzahlen", "Für Nord und Süd stehen Quartalsumsatz und Veränderung in Euro in der Tabelle. Die Veränderung rechnest du als Juni minus April."],
       ["Diagramm", "April, Mai und Juni stehen in dieser Reihenfolge auf der Zeitachse. Beide Regionen sind erkennbar, die Wertachse ist in Euro beschriftet und die April- und Juniwerte stimmen mit der Tabelle überein."],
