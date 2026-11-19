@@ -27,9 +27,9 @@ const plans = [
     "Verwende die Excel-Ausgangsdatei mit den Blättern Aufträge und Artikelstamm.",
     ["Suche die erste Artikelnummer von Hand im Artikelstamm.",
       "Übernimm per XVERWEIS Bezeichnung und Preis in die ersten drei Aufträge.",
-      "Prüfe den ersten Treffer manuell. Teste in einer Kopie eine unbekannte Artikelnummer mit der Rückgabe „Artikel fehlt“."],
+      "Prüfe den ersten Treffer manuell und mit der Artikelsuche im Browser. Teste in einer Kopie die unbekannte Nummer A-9999 mit der Rückgabe „Artikel fehlt“."],
     "Drei korrekte Treffer und eine verständliche Meldung beim fehlenden Artikel.",
-    "Such- und Rückgabematrix müssen dieselben Artikel in derselben Reihenfolge enthalten."
+    "Im Blatt Aufträge steht die erste Artikelnummer in B5. Im Artikelstamm reicht die Suchspalte von A5 bis A14. Verwende für Bezeichnung oder Preis jeweils dieselben Zeilen in Spalte B oder C."
   ],
   [4,
     "Endbestand und Nachbestellmenge berechnen.",

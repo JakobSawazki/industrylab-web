@@ -231,6 +231,21 @@ const sqlOrders = [
 ];
 
 const positionRows = [["O101", "1", "A01"], ["O101", "2", "A02"], ["O103", "1", "A01"]];
+const catalog = [
+  ["A-1001", "Steuermodul X1", 148.5], ["A-1002", "Sensorbox S2", 89.9],
+  ["A-1003", "Bedienpanel P4", 219], ["A-1004", "Leistungsmodul L3", 185],
+  ["A-1005", "Steuerplatine C5", 112.4], ["A-1006", "Gehäuse G8", 24.9],
+  ["A-1007", "Kabelsatz K2", 18.7], ["A-1008", "Netzteil N7", 76.6],
+  ["A-1009", "Displayeinheit D6", 132], ["A-1010", "Temperaturfühler T9", 37.8]
+];
+
+export function findCatalogArticle(number) {
+  const search = number.toUpperCase();
+  const index = catalog.findIndex(([id]) => id === search);
+  if (index < 0) return null;
+  const [id, label, price] = catalog[index];
+  return { id, label, price, row: index + 5 };
+}
 
 function scenarioTable(title, columns, rows) {
   const table = document.createElement("table");
@@ -263,6 +278,61 @@ function comparisonField(parent, caption, entries) {
   label.append(select);
   parent.append(label);
   return select;
+}
+
+function lookupLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario lookup-lab";
+  const summary = document.createElement("summary");
+  summary.textContent = "Artikelsuche wie mit XVERWEIS ausprobieren";
+  const intro = document.createElement("p");
+  intro.textContent = "Probiere A-1001 und A-9999 aus. Die Suche liest die Artikelnummer in Spalte A und gibt aus derselben Zeile die Bezeichnung aus B oder den Preis aus C zurück.";
+  const form = document.createElement("form");
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const label = document.createElement("label");
+  label.textContent = "Artikelnummer";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = "A-1001";
+  input.required = true;
+  label.append(input);
+  fields.append(label);
+  const column = comparisonField(fields, "Rückgabespalte", [["B", "B · Bezeichnung"], ["C", "C · Einzelpreis"]]);
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.textContent = "Artikel suchen";
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  const table = scenarioTable("Artikelstamm aus der Excel-Datei", ["Zeile", "Artikel-Nr.", "Bezeichnung", "Einzelpreis"],
+    catalog.map(([id, name, price], index) => [index + 5, id, name, euros.format(price)]));
+
+  let highlighted = [];
+  function clearResult() {
+    for (const cell of highlighted) cell.classList.remove("lookup-match");
+    highlighted = [];
+    status.textContent = "";
+  }
+  input.addEventListener("input", clearResult);
+  column.addEventListener("change", clearResult);
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    clearResult();
+    const article = findCatalogArticle(input.value);
+    if (!article) {
+      status.textContent = "Artikel fehlt. Die Artikelnummer wurde in Spalte A nicht gefunden.";
+      return;
+    }
+    const cells = table.tBodies[0].rows[article.row - 5].cells;
+    const returnIndex = column.value === "B" ? 2 : 3;
+    highlighted = [cells[1], cells[returnIndex]];
+    for (const cell of highlighted) cell.classList.add("lookup-match");
+    status.textContent = article.id + " in A" + article.row + " gefunden. Aus "
+      + column.value + article.row + " kommt " + cells[returnIndex].textContent + ".";
+  });
+  form.append(fields, button, status);
+  panel.append(summary, intro, form, table);
+  return panel;
 }
 
 function positionLab() {
@@ -445,6 +515,7 @@ function deliveriesLab(data) {
 }
 
 export function scenarioPanel(id, data) {
+  if (id === 3) return lookupLab();
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
   if (id === 14) return deliveriesLab(data);
