@@ -64,6 +64,20 @@ export function stockFormulaCheck(closing, minimum) {
 }
 
 const scenarios = {
+  2: {
+    title: "Soll und Ist am Grenzfall vergleichen",
+    fields: [["Ist-Menge für P-2703 in Stück", 65, 0, 1]],
+    note: "Das Soll für P-2703 beträgt 65 Stück. Sage den Status für 64, 65 und 66 Stück voraus und prüfe beide Bedingungen.",
+    calculate(actual) {
+      const target = 65;
+      const difference = actual - target;
+      const quota = number.format(100 * actual / target) + " %";
+      const inclusive = actual >= target ? "Erreicht" : "Unter Plan";
+      const strict = actual > target ? "Erreicht" : "Unter Plan";
+      return "Abweichung " + number.format(difference) + " Stück · Erfüllungsgrad " + quota
+        + ". Ist ≥ Soll ergibt „" + inclusive + "“. Ist > Soll ergibt „" + strict + "“.";
+    }
+  },
   4: {
     title: "Bestellvorschlag ausprobieren",
     fields: [["Anfangsbestand", 40, 0, 1], ["Zugang", 15, 0, 1], ["Abgang", 38, 0, 1],

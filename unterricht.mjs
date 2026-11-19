@@ -18,7 +18,7 @@ const plans = [
     "Ab 100 % gilt die Zielmenge als erreicht.\nAuftrag | Soll (Stück) | Ist (Stück)\nP-2701 | 120 | 123\nP-2702 | 90 | 86\nP-2703 | 65 | 65",
     ["Öffne die Excel-Ausgangsdatei und berechne für die drei Aufträge Abweichung und Erfüllungsgrad.",
       "Lege eine Statusformel an, die zwischen „Erreicht“ und „Unter Plan“ unterscheidet.",
-      "Teste die Formel bei Gleichheit und benenne die größte Unterschreitung in deiner Auswahl, falls eine vorliegt."],
+      "Teste die Formel bei Gleichheit. Nutze die Browserübung, um für P-2703 die Bedingungen ≥ und > bei 64, 65 und 66 Stück zu vergleichen. Benenne anschließend die größte Unterschreitung in der Excel-Auswahl."],
     "Drei ausgewertete Aufträge und ein Grenztest mit Ist = Soll.",
     "Rechne Ist minus Soll und Ist geteilt durch Soll. Verwende das Prozentformat."
   ],
