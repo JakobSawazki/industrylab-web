@@ -2,6 +2,11 @@ export const phases = [
   [5, "Einstieg"], [8, "Beispiel klären"], [24, "Praxis"], [8, "Ergebnis prüfen und Aufgabencheck"]
 ];
 
+export const dashboardSales = [
+  ["Jan", 12000], ["Feb", 14000], ["Mär", 11000],
+  ["Apr", 15000], ["Mai", 16000], ["Jun", 13000]
+];
+
 // IDs match lessons.mjs and remain stable when units are reordered.
 const plans = [
   [1,
@@ -87,10 +92,10 @@ const plans = [
   ],
   [10,
     "Die Geschäftsleitung möchte den Umsatzverlauf von Januar bis Juni auf einen Blick sehen. Zeige, welche Veränderungen besonders auffallen.",
-    "Umsatz in €: Jan 12.000, Feb 14.000, Mär 11.000, Apr 15.000, Mai 16.000, Jun 13.000.",
+    "Umsatz in €: " + dashboardSales.map(([month, sales]) => month + " " + sales.toLocaleString("de-DE")).join(", ") + ".",
     ["Markiere in der Excel-Ausgangsdatei A7:B13 und erstelle ein Liniendiagramm. Setze Januar bis Juni auf die Zeitachse und beschrifte die Wertachse in Euro.",
       "Zeige Gesamtumsatz und stärksten Monat oberhalb des Diagramms. Berechne in Spalte C die Veränderung zum Vormonat ab Februar.",
-      "Benenne die stärksten Rückgänge mit Monaten und Beträgen. Formuliere eine Frage zu den zusätzlichen Daten, die du zur Untersuchung brauchst."],
+      "Benenne die stärksten Rückgänge mit Monaten und Beträgen. Vergleiche bei Bedarf Linie und Säulen im Browser. Formuliere eine Frage zu den zusätzlichen Daten, die du zur Untersuchung brauchst."],
     "Ein Dashboard mit Monatsverlauf, zwei Kennzahlen, den stärksten Rückgängen und einer offenen Frage.",
     "Berechne für jeden Monat ab Februar den aktuellen Umsatz minus den Vormonatsumsatz. Mehrere Rückgänge können gleich groß sein.",
     { criteria: [

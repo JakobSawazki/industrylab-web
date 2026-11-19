@@ -1,3 +1,5 @@
+import { dashboardSales } from "./unterricht.mjs";
+
 const euros = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
 const number = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 });
 const axisNumber = new Intl.NumberFormat("de-DE", { notation: "compact", maximumFractionDigits: 1 });
@@ -134,7 +136,7 @@ const scenarios = {
 
 function breakEvenChart() {
   const figure = document.createElement("figure");
-  figure.className = "break-even-chart";
+  figure.className = "scenario-chart";
   const canvas = document.createElement("canvas");
   canvas.width = 600;
   canvas.height = 340;
@@ -688,6 +690,68 @@ function deliveriesLab(data) {
   return panel;
 }
 
+function dashboardChartLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Linien- und Säulendiagramm vergleichen";
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const type = comparisonField(fields, "Diagrammtyp", [["line", "Liniendiagramm"], ["bars", "Säulendiagramm"]]);
+  const figure = document.createElement("figure");
+  figure.className = "scenario-chart";
+  const canvas = document.createElement("canvas");
+  canvas.width = 600;
+  canvas.height = 340;
+  canvas.setAttribute("aria-hidden", "true");
+  const caption = document.createElement("figcaption");
+  const feedback = document.createElement("p");
+  feedback.setAttribute("role", "status");
+  caption.append(feedback);
+  figure.append(canvas, caption);
+  const data = document.createElement("details");
+  const dataTitle = document.createElement("summary");
+  dataTitle.textContent = "Umsatzwerte als Tabelle";
+  data.append(dataTitle, scenarioTable("Januar bis Juni", ["Monat", "Umsatz (€)"],
+    dashboardSales.map(([month, sales]) => [month, number.format(sales)])));
+
+  function draw() {
+    const bars = type.value === "bars";
+    feedback.textContent = bars
+      ? "Die Säulen beginnen bei null. Ihre Höhen helfen dir, die Umsätze der einzelnen Monate zu vergleichen."
+      : "Die Linie verbindet die Monate in ihrer zeitlichen Reihenfolge. An den fallenden Abschnitten erkennst du die Umsatzrückgänge.";
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const baseline = 278;
+    const x = index => 118 + index * 77;
+    const y = sales => baseline - sales / 16000 * 220;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = "22px system-ui, sans-serif";
+    context.fillStyle = "#213950";
+    context.fillText("Umsatz (€)", 75, 32);
+    for (const tick of [0, 4000, 8000, 12000, 16000]) {
+      context.fillText(number.format(tick), 4, y(tick) + 7);
+      context.fillStyle = "#a0b3c4";
+      context.fillRect(75, y(tick), 485, tick === 0 ? 2 : 1);
+      context.fillStyle = "#213950";
+    }
+    dashboardSales.forEach(([month], index) => context.fillText(month, x(index) - 19, 316));
+    context.fillStyle = context.strokeStyle = "#175987";
+    context.lineWidth = 4;
+    context.beginPath();
+    dashboardSales.forEach(([, sales], index) => {
+      if (bars) context.fillRect(x(index) - 22, y(sales), 44, baseline - y(sales));
+      else if (index === 0) context.moveTo(x(index), y(sales));
+      else context.lineTo(x(index), y(sales));
+    });
+    if (!bars) context.stroke();
+  }
+  type.addEventListener("change", draw);
+  draw();
+  panel.append(summary, fields, figure, data);
+  return panel;
+}
+
 function deliveryPlanLab() {
   const panel = document.createElement("details");
   panel.className = "scenario";
@@ -788,6 +852,7 @@ export function scenarioPanel(id, data) {
   if (id === 3) return lookupLab();
   if (id === 5) return pivotLab();
   if (id === 6) return costLab();
+  if (id === 10) return dashboardChartLab();
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
   if (id === 13) return deliveryPlanLab();
