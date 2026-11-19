@@ -447,6 +447,9 @@ legend { font-weight: 750; }
 .scenario-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .6rem; margin-block: 12px; }
 .scenario-fields label { display: grid; gap: .3rem; font-size: .86rem; }
 .scenario-fields input, .scenario-fields select { width: 100%; padding: .4rem; }
+.break-even-chart { margin: .8rem 0 0; }
+.break-even-chart canvas { display: block; width: min(100%, 600px); height: auto; border: 1px solid var(--line); border-radius: 7px; background: #f2f6fa; }
+.break-even-chart figcaption p { margin: .4rem 0; }
 .sql-lab pre { white-space: pre-wrap; overflow-wrap: anywhere; padding: .7rem; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); }
 .scenario table { border-collapse: collapse; width: 100%; text-align: start; }
 .scenario caption { text-align: start; font-weight: 750; margin-block: .4rem; }

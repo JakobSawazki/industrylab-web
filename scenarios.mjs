@@ -1,5 +1,6 @@
 const euros = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
 const number = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 2 });
+const axisNumber = new Intl.NumberFormat("de-DE", { notation: "compact", maximumFractionDigits: 1 });
 
 export function breakEven(fixed, variable, price, units) {
   const fixedCents = Math.round(fixed * 100);
@@ -8,7 +9,11 @@ export function breakEven(fixed, variable, price, units) {
   const cost = fixedCents + variableCents * units;
   const sales = priceCents * units;
   const contribution = priceCents - variableCents;
-  return { cost: cost / 100, sales: sales / 100, profit: (sales - cost) / 100, minimum: contribution > 0 ? Math.ceil(fixedCents / contribution) : null };
+  const intersection = contribution > 0 ? fixedCents / contribution : null;
+  return {
+    cost: cost / 100, sales: sales / 100, profit: (sales - cost) / 100,
+    intersection, minimum: intersection === null ? null : Math.ceil(intersection)
+  };
 }
 
 export function campaignMetrics(clicks, orders, spend, revenue) {
@@ -51,6 +56,7 @@ const scenarios = {
     title: "Gewinnschwelle ausprobieren",
     fields: [["Fixkosten in €", 4000, 1, 0.01], ["Variable Stückkosten in €", 15, 0, 0.01],
       ["Verkaufspreis je Stück in €", 25, 0, 0.01], ["Absatzmenge", 450, 0, 1]],
+    chart: breakEvenChart,
     calculate(fixed, variable, price, units) {
       const { cost, sales, profit, minimum } = breakEven(fixed, variable, price, units);
       return "Erlös " + euros.format(sales) + " · Kosten " + euros.format(cost) + " · Ergebnis " + euros.format(profit)
@@ -72,12 +78,86 @@ const scenarios = {
   }
 };
 
+function breakEvenChart() {
+  const figure = document.createElement("figure");
+  figure.className = "break-even-chart";
+  const canvas = document.createElement("canvas");
+  canvas.width = 600;
+  canvas.height = 340;
+  canvas.setAttribute("aria-hidden", "true");
+  const caption = document.createElement("figcaption");
+  const legend = document.createElement("p");
+  legend.textContent = "Erlös · blaue Linie. Gesamtkosten · gestrichelte orange Linie.";
+  const point = document.createElement("p");
+  caption.append(legend, point);
+  figure.append(canvas, caption);
+
+  function update(fixed, variable, price, units) {
+    const start = breakEven(fixed, variable, price, 0);
+    const quantityMax = Math.max(600, units, Math.ceil((start.intersection ?? 0) * 1.1));
+    const end = breakEven(fixed, variable, price, quantityMax);
+    const valueMax = Math.max(end.cost, end.sales, 1);
+    const intersection = start.intersection;
+    const crossing = intersection === null ? null : breakEven(fixed, variable, price, intersection).sales;
+    const approximation = Number.isInteger(intersection) ? "" : "rund ";
+    point.textContent = crossing === null
+      ? "Kein Schnittpunkt. Die Gesamtkosten bleiben bei jeder Menge höher als der Erlös."
+      : "Schnittpunkt bei " + approximation + number.format(intersection) + " Stück und " + euros.format(crossing) + ".";
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const left = 94, right = 535, top = 42, bottom = 269;
+    const x = quantity => left + quantity / quantityMax * (right - left);
+    const y = value => bottom - value / valueMax * (bottom - top);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = "18px system-ui, sans-serif";
+    context.fillStyle = "#213950";
+    context.textBaseline = "middle";
+    context.textAlign = "left";
+    context.fillText("Betrag (€)", left, 20);
+    context.fillText("Absatzmenge (Stück)", left, 322);
+    context.lineWidth = 1;
+    context.strokeStyle = "#a0b3c4";
+    context.setLineDash([]);
+    for (const fraction of [0, .25, .5, .75, 1]) {
+      const amount = valueMax * fraction;
+      context.beginPath();
+      context.moveTo(left, y(amount));
+      context.lineTo(right, y(amount));
+      context.stroke();
+      context.textAlign = "right";
+      context.fillText(axisNumber.format(amount), left - 8, y(amount));
+      context.textAlign = "center";
+      context.fillText(axisNumber.format(Math.round(quantityMax * fraction)), x(quantityMax * fraction), bottom + 22);
+    }
+    for (const [initial, final, color, dash] of [
+      [start.cost, end.cost, "#a34611", [9, 6]],
+      [0, end.sales, "#17618b", []]
+    ]) {
+      context.beginPath();
+      context.lineWidth = 3;
+      context.strokeStyle = color;
+      context.setLineDash(dash);
+      context.moveTo(left, y(initial));
+      context.lineTo(right, y(final));
+      context.stroke();
+    }
+    if (crossing !== null) {
+      context.beginPath();
+      context.arc(x(intersection), y(crossing), 5, 0, Math.PI * 2);
+      context.fill();
+    }
+  }
+  return { figure, update };
+}
+
 function calculatorFields(scenario, values) {
   const calculator = document.createElement("div");
   const fields = document.createElement("div");
   fields.className = "scenario-fields";
   const result = document.createElement("p");
   result.setAttribute("role", "status");
+  const chart = scenario.chart?.();
   const inputs = scenario.fields.map(([caption, defaultValue, minimum, step], index) => {
     const label = document.createElement("label");
     label.textContent = caption;
@@ -93,13 +173,18 @@ function calculatorFields(scenario, values) {
     return input;
   });
   function update() {
-    result.textContent = inputs.every(input => input.validity.valid)
-      ? scenario.calculate(...inputs.map(input => input.valueAsNumber))
-      : "Prüfe die Eingaben.";
+    const valid = inputs.every(input => input.validity.valid);
+    const current = inputs.map(input => input.valueAsNumber);
+    result.textContent = valid ? scenario.calculate(...current) : "Prüfe die Eingaben.";
+    if (chart) {
+      chart.figure.hidden = !valid;
+      if (valid) chart.update(...current);
+    }
   }
   fields.addEventListener("input", update);
   update();
   calculator.append(fields, result);
+  if (chart) calculator.append(chart.figure);
   return calculator;
 }
 

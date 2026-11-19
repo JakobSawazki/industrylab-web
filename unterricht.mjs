@@ -63,7 +63,7 @@ const plans = [
     "Fixkosten 4.000 €, variable Stückkosten 15 €, Preis 25 €. Mengen: 0, 200, 400 und 600 Stück.",
     ["Berechne in der Excel-Ausgangsdatei Erlös, Kosten und Ergebnis für jede Menge.",
       "Zeichne ein Punktdiagramm mit Linien für Erlös und Kosten. Die Menge steht auf der X-Achse.",
-      "Kontrolliere den Schnittpunkt im Rechner. Probiere dort 15 € Verkaufspreis aus und erkläre das Ergebnis."],
+      "Gleiche dein Excel-Diagramm mit dem Browserdiagramm ab. Setze den Verkaufspreis dort auf 15 € und erkläre, warum sich die Linien jetzt nicht schneiden."],
     "Zwei beschriftete Reihen und eine Erklärung für beide Preisszenarien.",
     "Fixkosten geteilt durch Stückdeckungsbeitrag ergibt die Gewinnschwelle, sofern der Deckungsbeitrag positiv ist."
   ],
