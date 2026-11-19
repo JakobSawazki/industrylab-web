@@ -280,6 +280,60 @@ function comparisonField(parent, caption, entries) {
   return select;
 }
 
+// From the published pivot workbook, based on quantity × unit price for rows 5–184.
+const regionalOrders = [
+  { region: "Nord", count: 46, revenue: 112349 },
+  { region: "Ost", count: 52, revenue: 110289 },
+  { region: "Süd", count: 44, revenue: 106145 },
+  { region: "West", count: 38, revenue: 81000 }
+];
+const lastOrder = { region: "Nord", count: 1, revenue: 27 * 27 };
+
+export function summarizeRegions(metric, includeLastOrder) {
+  const rows = regionalOrders.map(region => {
+    const omitted = !includeLastOrder && region.region === lastOrder.region ? lastOrder[metric] : 0;
+    return [region.region, region[metric] - omitted];
+  });
+  const total = rows.reduce((sum, [, value]) => sum + value, 0);
+  return { rows, total };
+}
+
+function pivotLab() {
+  const panel = document.createElement("details");
+  panel.className = "scenario";
+  const summary = document.createElement("summary");
+  summary.textContent = "Pivot-Ergebnis kontrollieren";
+  const intro = document.createElement("p");
+  intro.textContent = "Vergleiche zuerst deine Excel-Auswertung mit der vollständigen Liste. Wechsle dann zu Anzahl und probiere den verkürzten Quellbereich aus.";
+  const fields = document.createElement("div");
+  fields.className = "scenario-fields";
+  const metric = comparisonField(fields, "Wertfeld zusammenfassen", [["revenue", "Summe von Umsatz"], ["count", "Anzahl von Umsatz"]]);
+  const range = comparisonField(fields, "Quellbereich im Blatt Daten", [["full", "A4:I184 · vollständig"], ["short", "A4:I183 · ohne letzten Auftrag"]]);
+  const status = document.createElement("p");
+  status.setAttribute("role", "status");
+  const result = document.createElement("div");
+  function update() {
+    const isRevenue = metric.value === "revenue";
+    const full = summarizeRegions(metric.value, true);
+    const { rows, total } = summarizeRegions(metric.value, range.value === "full");
+    const formatter = isRevenue ? euros : number;
+    const title = isRevenue ? "Summe von Umsatz" : "Anzahl von Umsatz";
+    result.replaceChildren(scenarioTable("Umsatzfeld nach Region", ["Region", title],
+      [...rows, ["Gesamtergebnis", total]].map(([region, value]) => [region, formatter.format(value)])));
+    const completed = isRevenue
+      ? "Die Summe addiert die Auftragsumsätze in Euro."
+      : "Anzahl zählt ausgefüllte Umsatzzellen. Jede davon gehört hier zu einem Auftrag.";
+    const omitted = isRevenue
+      ? euros.format(full.total - total) + " fehlen gegenüber der vollständigen Liste."
+      : "Der letzte Auftrag fehlt. Gegenüber der vollständigen Liste fehlt eine ausgefüllte Umsatzzelle.";
+    status.textContent = full.total === total ? completed : completed + " " + omitted;
+  }
+  fields.addEventListener("change", update);
+  update();
+  panel.append(summary, intro, fields, result, status);
+  return panel;
+}
+
 function lookupLab() {
   const panel = document.createElement("details");
   panel.className = "scenario lookup-lab";
@@ -516,6 +570,7 @@ function deliveriesLab(data) {
 
 export function scenarioPanel(id, data) {
   if (id === 3) return lookupLab();
+  if (id === 5) return pivotLab();
   if (id === 11) return positionLab();
   if (id === 12) return orderLab();
   if (id === 14) return deliveriesLab(data);

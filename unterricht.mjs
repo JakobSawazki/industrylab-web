@@ -42,12 +42,12 @@ const plans = [
   ],
   [5,
     "Umsatz nach Region mit einer Pivot-Tabelle verdichten.",
-    "Die Excel-Datei enthält 180 fiktive Aufträge. Bearbeite heute nur die regionale Sicht.",
-    ["Berechne im Blatt „Daten“ den Umsatz aus Menge × Einzelpreis und kopiere die Formel auf alle Aufträge.",
-      "Erstelle eine Pivot-Tabelle mit Region in den Zeilen und Summe von Umsatz in den Werten.",
-      "Benenne die stärkste Region und vergleiche das Pivot-Gesamtergebnis mit der Summe der Umsatzspalte."],
+    "Die Excel-Datei enthält 180 Aufträge für die regionale Umsatzauswertung.",
+    ["Berechne im Blatt „Daten“ den Umsatz in I5 aus Menge und Einzelpreis und kopiere die Formel bis I184.",
+      "Erstelle aus A4:I184 eine Pivot-Tabelle. Setze „Region“ in die Zeilen und „Umsatz (€)“ als Summe in die Werte.",
+      "Benenne die stärkste Region und gleiche das Pivot-Gesamtergebnis mit der Summe der Umsatzspalte ab. Prüfe im Browser, wie sich Anzahl oder ein verkürzter Quellbereich auswirken."],
     "Pivot-Tabelle, stärkste Region mit Umsatz und geprüfte Gesamtsumme.",
-    "Prüfe auf Zahlen und die Einstellung „Summe“, wenn Excel stattdessen „Anzahl“ anzeigt."
+    "Bei „Anzahl“ prüfst du zuerst, ob die Umsätze als Zahlen vorliegen. Wähle in den Wertfeldeinstellungen „Summe“. Aktualisiere die Pivot-Tabelle nach Änderungen an den Quelldaten."
   ],
   [6,
     "Fixkosten, variable Kosten und Stückkosten in Excel modellieren.",
