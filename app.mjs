@@ -29,6 +29,7 @@ function element(tag, content, className) {
 const learningNav = find("learning-nav");
 if (learningNav) {
   const summary = learningNav.querySelector("summary");
+  const header = learningNav.closest(".top");
   const currentLesson = lessonPage ? Number(route.get("nr")) : null;
   const items = lessons.map(lesson => {
     const item = element("li");
@@ -41,6 +42,23 @@ if (learningNav) {
     return item;
   });
   find("learning-nav-units").append(...items);
+
+  function updateNavigationLayout() {
+    document.documentElement.style.setProperty("--header-block-size", header.getBoundingClientRect().height + "px");
+    learningNav.style.setProperty("--learning-menu-anchor", summary.getBoundingClientRect().bottom + "px");
+  }
+  updateNavigationLayout();
+  new ResizeObserver(updateNavigationLayout).observe(header);
+  learningNav.addEventListener("toggle", updateNavigationLayout);
+
+  const initialSection = location.hash;
+  if (lessonPage && ["#lesson-plan", "#lesson-responses", "#quiz"].includes(initialSection)) {
+    window.addEventListener("load", () => requestAnimationFrame(() => {
+      if (location.hash !== initialSection || lessonPage.hidden) return;
+      updateNavigationLayout();
+      find(initialSection.slice(1)).scrollIntoView();
+    }), { once: true });
+  }
 
   document.addEventListener("pointerdown", event => {
     if (learningNav.open && !learningNav.contains(event.target)) learningNav.open = false;
