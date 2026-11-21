@@ -18,6 +18,22 @@ const requestedField = Number(route.get("lf"));
 let activeField = filters.some(([, field]) => field === requestedField) ? requestedField : 0;
 let completed = [];
 let profile = readProfile();
+let pendingProfile = false;
+let pendingProgress = false;
+const pendingResponses = new Map();
+
+function warnBeforeLeaving(event) {
+  event.preventDefault();
+  event.returnValue = true;
+}
+
+function updateLeaveWarning() {
+  if (pendingProfile || pendingProgress || pendingResponses.size) {
+    window.addEventListener("beforeunload", warnBeforeLeaving);
+  } else {
+    window.removeEventListener("beforeunload", warnBeforeLeaving);
+  }
+}
 
 function element(tag, content, className) {
   const node = document.createElement(tag);
@@ -106,10 +122,12 @@ function saveProgress(entries) {
   try {
     syncProgress();
     writeStoredProgress(localStorage, completed);
-    return true;
+    pendingProgress = false;
   } catch {
-    return false;
+    pendingProgress = true;
   }
+  updateLeaveWarning();
+  return !pendingProgress;
 }
 
 window.addEventListener("storage", event => {
@@ -274,7 +292,6 @@ function drawLessonPlan(unit, extras) {
   }
 }
 
-const pendingResponses = new Map();
 const visibleResponses = new Map();
 
 function responseValue(id) {
@@ -291,11 +308,11 @@ function saveResponse(id, value) {
     if (value.trim()) localStorage.setItem(responsePrefix + id, value);
     else localStorage.removeItem(responsePrefix + id);
     pendingResponses.delete(id);
-    return true;
   } catch {
     pendingResponses.set(id, value);
-    return false;
   }
+  updateLeaveWarning();
+  return !pendingResponses.has(id);
 }
 
 function restoreResponseFields() {
@@ -495,7 +512,6 @@ if (downloads) {
 
 const profileDialog = find("profile");
 const profileFields = { studentCode: find("student-code"), className: find("class-name") };
-let pendingProfile = false;
 
 function applyProfile(nextProfile) {
   for (const [key, field] of Object.entries(profileFields)) {
@@ -527,6 +543,7 @@ function saveProfile(nextProfile) {
   } catch {
     pendingProfile = true;
   }
+  updateLeaveWarning();
   return !pendingProfile;
 }
 
