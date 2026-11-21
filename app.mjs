@@ -608,14 +608,16 @@ find("backup-file").addEventListener("change", async event => {
       studentCode: profile.studentCode || imported.studentCode,
       className: profile.className || imported.className
     };
-    const savedProfile = (nextProfile.studentCode === profile.studentCode && nextProfile.className === profile.className)
-      || saveProfile(nextProfile);
-    let savedResponses = true;
-    for (const [id, answer] of Object.entries(responses)) {
-      if (!responseValue(id).trim()) savedResponses = saveResponse(id, answer) && savedResponses;
+    if (pendingProfile || nextProfile.studentCode !== profile.studentCode || nextProfile.className !== profile.className) {
+      saveProfile(nextProfile);
     }
+    const responsesToSave = new Map(pendingResponses);
+    for (const [id, answer] of Object.entries(responses)) {
+      if (!responseValue(id).trim()) responsesToSave.set(id, answer);
+    }
+    for (const [id, answer] of responsesToSave) saveResponse(id, answer);
     restoreResponseFields();
-    const saved = saveProgress(entries) && savedProfile && savedResponses;
+    const saved = saveProgress(entries) && !pendingProfile && pendingResponses.size === 0;
     refresh();
     find("backup-status").textContent = saved
       ? "Sicherung geladen. Dein Lernstand, leere Profilfelder und leere Antwortfelder wurden ergänzt."
